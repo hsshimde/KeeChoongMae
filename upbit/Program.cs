@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using upbit.View;
 
 namespace upbit
 {
@@ -16,7 +17,20 @@ namespace upbit
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            LogInForm logInForm = new LogInForm();
+            Application.Run(logInForm);
+
+            if (logInForm.BLogInFlag)
+            {
+                Application.Run(new MainForm(logInForm.GetUpbitAPI()));
+            }
+
+            //SelectCoinForm selectCoinForm = new SelectCoinForm();
+            //Application.Run(selectCoinForm);
+
+
         }
+
+
     }
 }
