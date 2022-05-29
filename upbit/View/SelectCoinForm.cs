@@ -66,18 +66,17 @@ namespace upbit.View
         private void FillLeftGridWithoutBeforeSelected()
         {
             dataGridView_Left.Rows.Clear();
-            List<string> listBeforeSelectedMarketInfo = GetBeforeSelectedMarketInfo();
-
+            string[] beforeSelectedMarketInfos = SelectedMarketInfo.Split(',');
             foreach (MarketAll item in m_ListMarketInfo)
             {
                 if (item.market.Contains("KRW-"))
                 {
                     bool bShouldAdd = true;
-                    if(listBeforeSelectedMarketInfo!=null)
+                    if(beforeSelectedMarketInfos.Count()>=1)
                     {
-                        for(int nIdx = 0; nIdx < listBeforeSelectedMarketInfo.Count; nIdx++)
+                        for(int nIdx = 0; nIdx < beforeSelectedMarketInfos.Count(); nIdx++)
                         {
-                            if(item.market.CompareTo(listBeforeSelectedMarketInfo[nIdx]) == 0)
+                            if(item.market.CompareTo(beforeSelectedMarketInfos[nIdx]) == 0)
                             {
                                 bShouldAdd = false;
                                 break;
@@ -127,19 +126,20 @@ namespace upbit.View
 
         private void RestoreBeforeSelectedOnRight()
         {
-            List<string> listBeforeSelectedMarketInfo = GetBeforeSelectedMarketInfo();
-            if(listBeforeSelectedMarketInfo == null)
+            if(SelectedMarketInfo.Count()  < 1)
             {
                 return;
             }
+            string[] beforeSelectedMarketInfos = SelectedMarketInfo.Split(',');
+           
             foreach (MarketAll item in m_ListMarketInfo)
             {
                 if (item.market.Contains("KRW-"))
                 {
                     bool bShouldAdd = false;
-                    for(int nIdx = 0; nIdx < listBeforeSelectedMarketInfo.Count; nIdx++)
+                    for(int nIdx = 0; nIdx < beforeSelectedMarketInfos.Count(); nIdx++)
                     {
-                        if(item.market.CompareTo(listBeforeSelectedMarketInfo[nIdx]) == 0)
+                        if(item.market.CompareTo(beforeSelectedMarketInfos[nIdx]) == 0)
                         {
                             bShouldAdd = true;
                             break;

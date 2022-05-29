@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using upbit.UpbitAPI.Model;
+
 namespace upbit.View
 {
     internal class MainFormButton
@@ -13,8 +15,8 @@ namespace upbit.View
     public partial class MainForm
     {
         private SelectCoinForm m_selectCoinForm;
-        private string m_strSelectMarketInfo;
-        private string m_strCoinName;
+        private string m_SelectMarketInfo;
+        private string m_SelectCoinName;
         private bool m_bIsRunning;
         private async void OnButtonClickedFromMainForm(object sender, EventArgs e)
         {
@@ -27,7 +29,7 @@ namespace upbit.View
             else if(sender.Equals(toolStripButton_SelectCoin))
             {
                 SelectTargetItems();
-                await m_selectCoinForm.Init(m_strSelectMarketInfo);
+                await m_selectCoinForm.Init(m_SelectMarketInfo);
             }
             //Stop Renewing Ticker Info 
             else if(sender.Equals(toolStripButton_STOP))
@@ -64,13 +66,15 @@ namespace upbit.View
             }
             if(sbMarketInfo.Length < 1 || sbCoinName.Length < 1)
             {
-                m_strSelectMarketInfo = string.Empty;
-                m_strCoinName = string.Empty;
+                m_SelectMarketInfo = string.Empty;
+                m_SelectCoinName = string.Empty;
             }
             else
             {
-                m_strSelectMarketInfo = sbMarketInfo.ToString();
-                m_strCoinName = sbCoinName.ToString();
+                sbMarketInfo.Length--;
+                sbCoinName.Length--;
+                m_SelectMarketInfo = sbMarketInfo.ToString();
+                m_SelectCoinName = sbCoinName.ToString();
             }
             sbMarketInfo.Clear();
             sbCoinName.Clear();
@@ -84,6 +88,17 @@ namespace upbit.View
         {
             dataGridView_Account.Rows.Clear();
         }
+        
+        private void CleareMonitoringDataGrid()
+        {
+            dataGridView_Monitoring.Rows.Clear();
+        }
+
+        private void ClearDataGrid()
+        {
+            dataGridView_Monitoring.Rows.Clear();
+            dataGridView_Account.Rows.Clear();
+        }
 
         private void ResetKeeChoongMae()
         {
@@ -91,67 +106,94 @@ namespace upbit.View
             {
                 running.Stop();
                 m_bIsRunning = false;
-                ClearCoinAccountDataGrid();
+                //ClearCoinAccountDataGrid();
+                ClearDataGrid();
             }
             FillAccountGridWithSelectedItems();
-            if(this.m_strSelectMarketInfo.Length < 1)
+            //어떤 종목도 설정하지 않았을 때
+            if(this.m_SelectMarketInfo.Length < 1)
             {
-                this.m_strSelectMarketInfo = string.Empty;
-                return;
+                this.m_SelectMarketInfo = string.Empty;
             }
-            running.m_strSelection = this.m_strSelectMarketInfo.Substring(0, m_strSelectMarketInfo.Length - 1);
+            running.m_SelectMarketInfo = this.m_SelectMarketInfo;
         }
 
         private void FillAccountGridWithSelectedItems()
         {
             dataGridView_Account.Rows.Clear();
             //List<string> listCoinName = new List<string>();
-            int nCoinNameStartIdx = 0;
-            int nCoinNameFoundIdx = m_strCoinName.IndexOf(",");
-            int nMarketInfoStartIdx = 0;
-            int nMarketInfoFoundIdx = m_strSelectMarketInfo.IndexOf(",");
-            if(nCoinNameFoundIdx == -1)
+            //int nCoinNameStartIdx = 0;
+            int nCoinNameFoundIdx = m_SelectCoinName.IndexOf(",");
+            //int nMarketInfoStartIdx = 0;
+            int nMarketInfoFoundIdx = m_SelectMarketInfo.IndexOf(",");
+
+            string[] marketInfos = m_SelectMarketInfo.Split(',');
+            string[] coinNames = m_SelectCoinName.Split(',');
+
+            if(marketInfos.Count() < 1 || coinNames.Count() < 1)
             {
                 dataGridView_Account.Rows.Clear();
                 return;
             }
-            
-            while (nCoinNameFoundIdx != -1)
+
+            for(int nIdx = 0; nIdx < marketInfos.Count(); nIdx++)
             {
-                int nCoinNameLength = nCoinNameFoundIdx - nCoinNameStartIdx;
-                string strCoinName = m_strCoinName.Substring(nCoinNameStartIdx, nCoinNameLength);
-
-                int nMarketInfoLength = nMarketInfoFoundIdx - nMarketInfoStartIdx;
-                string strMarketInfo = m_strSelectMarketInfo.Substring(nMarketInfoStartIdx, nMarketInfoLength);
-
                 int nRow = dataGridView_Account.Rows.Add();
-                dataGridView_Account["account_coinName", nRow].Value = strCoinName;
-                dataGridView_Account["account_market", nRow].Value = strMarketInfo;
+                dataGridView_Account["account_coinName", nRow].Value = coinNames[nIdx];
+                dataGridView_Account["account_market", nRow].Value = marketInfos[nIdx];
                 dataGridView_Account["account_profit", nRow].Value = "-";
                 dataGridView_Account["account_quant", nRow].Value = "-";
                 dataGridView_Account["account_avgPrice", nRow].Value = "-";
                 dataGridView_Account["account_curPrice", nRow].Value = "-";
-
-                nCoinNameStartIdx = nCoinNameFoundIdx + 1;
-                nCoinNameFoundIdx = m_strCoinName.IndexOf(",", nCoinNameStartIdx);
-
-                nMarketInfoStartIdx = nMarketInfoFoundIdx + 1;
-                nMarketInfoFoundIdx = m_strSelectMarketInfo.IndexOf(",", nMarketInfoStartIdx);
             }
+
+
+            //if(nCoinNameFoundIdx == -1)
+            //{
+            //    dataGridView_Account.Rows.Clear();
+            //    return;
+            //}
+            
+            //while (nCoinNameFoundIdx != -1)
+            //{
+            //    int nCoinNameLength = nCoinNameFoundIdx - nCoinNameStartIdx;
+            //    string strCoinName = m_strCoinName.Substring(nCoinNameStartIdx, nCoinNameLength);
+
+            //    int nMarketInfoLength = nMarketInfoFoundIdx - nMarketInfoStartIdx;
+            //    string strMarketInfo = m_strSelectMarketInfo.Substring(nMarketInfoStartIdx, nMarketInfoLength);
+
+            //    int nRow = dataGridView_Account.Rows.Add();
+            //    dataGridView_Account["account_coinName", nRow].Value = strCoinName;
+            //    dataGridView_Account["account_market", nRow].Value = strMarketInfo;
+            //    dataGridView_Account["account_profit", nRow].Value = "-";
+            //    dataGridView_Account["account_quant", nRow].Value = "-";
+            //    dataGridView_Account["account_avgPrice", nRow].Value = "-";
+            //    dataGridView_Account["account_curPrice", nRow].Value = "-";
+
+            //    nCoinNameStartIdx = nCoinNameFoundIdx + 1;
+            //    nCoinNameFoundIdx = m_strCoinName.IndexOf(",", nCoinNameStartIdx);
+
+            //    nMarketInfoStartIdx = nMarketInfoFoundIdx + 1;
+            //    nMarketInfoFoundIdx = m_strSelectMarketInfo.IndexOf(",", nMarketInfoStartIdx);
+            //}
         }
 
         private void StartKeeChoongMae()
         {
             if (this.bCoinSelectDone)
             {
-                if(!m_bIsRunning)
-                {
-                    AddMonitoringGridCol(this.m_strSelectMarketInfo);
-                    m_bIsRunning = true;
-                    running.Go();
-                    toolStripButton_START.Enabled = false;
-                    toolStripButton_SelectCoin.Enabled = false;
-                }
+                //StringBuilder marketInfoBuilder = new StringBuilder();
+                //StringBuilder coinNamesBuilder = new StringBuilder();
+                //marketInfoBuilder.AppendFormat(m_SelectMarketInfo);
+                //coinNamesBuilder.AppendFormat(m_SelectCoinName);
+                //AddMonitoringGridCol(marketInfoBuilder, coinNamesBuilder);
+                //m_bIsRunning = true;
+                running.Go();
+                toolStripButton_START.Enabled = false;
+                toolStripButton_SelectCoin.Enabled = false;
+                //marketInfoBuilder = null;
+                //coinNamesBuilder = null;
+                //}
             }
             else
             {
@@ -177,10 +219,13 @@ namespace upbit.View
         {
             if(m_bIsRunning)
             {
-                bCoinSelectDone = false;
+                //bCoinSelectDone = false;
                 m_bIsRunning = false;
                 running.Stop();
+                toolStripButton_START.Enabled = true;
+                toolStripButton_SelectCoin.Enabled = true;
                 ResetKeeChoongMae();
+                
             }
             else
             {

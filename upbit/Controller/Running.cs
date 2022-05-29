@@ -13,7 +13,7 @@ namespace upbit.Controller
     {
         private System.Timers.Timer m_MainTimer;
         private APIClass m_API;
-        public string m_strSelection { get; set; }
+        public string m_SelectMarketInfo { get; set; }
         private MainForm m_MainForm;
         
         public Running(APIClass api, MainForm mainForm)
@@ -22,9 +22,9 @@ namespace upbit.Controller
             m_MainForm = mainForm;
         }
 
-        public void Go()
+        public async Task Go()
         {
-            BeforeGoRunning();
+            await BeforeGoRunning();
             this.m_MainTimer.Start();
         }
 

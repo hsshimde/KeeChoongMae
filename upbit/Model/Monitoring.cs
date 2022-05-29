@@ -9,13 +9,13 @@ namespace upbit.UpbitAPI.Model
     public class Monitoring : IDisposable
     {
         public string MarketInfo { get; set; }
-        public string CurPrice { get; set; }
+        public double CurPrice { get; set; }
         public double _24Hour { get; set; }
 
         public Monitoring(string marketInfo, double curPrice, double _24h)
         {
             MarketInfo = marketInfo;
-            //CurPrice = curPrice;
+            CurPrice = curPrice;
             _24Hour = _24h;
         }
 

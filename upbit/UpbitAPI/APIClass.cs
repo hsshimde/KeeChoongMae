@@ -64,22 +64,16 @@ namespace upbit.UpbitAPI
             }
         }
 
-        public string GetOrderChance(string market)
+        public async Task<OrderChance> GetOrderChance(string market)
         {
             Dictionary<string, string> parameters = new Dictionary<string, string>();
             parameters.Add("market", market);
             //return mWithParam.Get("/v1/orders/chance", parameters, RestSharp.Method.GET);
             StringBuilder sbReturn = new StringBuilder();
-            //mWithParam.GetAsync("/v1/orders/chance", parameters, RestSharp.Method.GET, sbReturn);
-            mWithParam.GetAsync("/v1/orders/chance", parameters, RestSharp.Method.GET, sbReturn);
-            if (sbReturn != null)
-            {
-                return sbReturn.ToString();
-            }
-            else
-            {
-                return null;
-            }
+            Task<string> dataTask =  mWithParam.Get("/v1/orders/chance", parameters, RestSharp.Method.GET);
+            string data = await dataTask;
+
+            return JsonConvert.DeserializeObject<OrderChance>(data);
         }
 
         public async Task<Order> GetOrder(string uuid)

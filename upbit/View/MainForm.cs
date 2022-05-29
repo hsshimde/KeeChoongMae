@@ -43,6 +43,7 @@ namespace upbit.View
         private void InitDataGridView()
         {
             SetDataGridViewColMiddleCenter(dataGridView_Account);
+            SetDataGridViewColMiddleCenter(dataGridView_Monitoring);
         }
 
 
@@ -59,6 +60,7 @@ namespace upbit.View
             this.running.ehUpdateCoinAccount += OnEventAccountUpdate;
             this.running.ehRemoveAccount += OnEventAccountDelete;
             this.running.ehUpdateTotalAsset += OnUpdateTotalAsset;
+            this.running.ehUpdateMonitoring += OnMonitoringEvent;
 
         }
 

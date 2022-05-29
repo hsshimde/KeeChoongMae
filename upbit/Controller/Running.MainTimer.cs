@@ -22,22 +22,28 @@ namespace upbit.Controller
 
         private async Task GetMainData()
         {
-            Task<List<Ticker>> TickerTask = m_API.GetTicker(m_strSelection);
             Task<List<Account>> accountTask = m_API.GetAccount();
-            List<Account> accountList = await accountTask;
+            List<Account> registeredAccountList = await accountTask;
+            
+            Task<List<Ticker>> TickerTask = m_API.GetTicker(m_SelectMarketInfo);
             List<Ticker> tickerList = await TickerTask;
+            List<Account> registeredAccountListCopy = new List<Account>(registeredAccountList);
 
-           
-            if (accountList != null && tickerList != null)
+
+
+            if (registeredAccountList != null && tickerList != null)
             {
                 GetTicker(tickerList);
-                GetAccountInfo(accountList);
+                GetAccountInfo(registeredAccountList);
+                GetMyTotalAsset(registeredAccountListCopy);
             }
             else
             {
                 m_MainForm.ConnectionNotWorking();
             }
-           
+
+            Console.WriteLine("Execution Complete");
+
         }
 
         private void InitializeRunning(APIClass api)
@@ -60,7 +66,6 @@ namespace upbit.Controller
                     using (Coin coin = dictStrCoin[item.market])
                     {
                         double curPrice = item.trade_price;
-                        coin.CurPrice = curPrice;
                         coin.CurPrice = item.trade_price;
                         double _24h = CalculateProfit(item.opening_price, curPrice);
                         using (Monitoring monitoring = new Monitoring(coin.MarketInfo, coin.CurPrice, _24h))
@@ -86,12 +91,13 @@ namespace upbit.Controller
 
         private void GetAccountInfo(List<Account> listAccount)
         {
-            double dblKRW = 0;
-            double dblTotal = 0;
+            //double KRW = 0;
+            //double total = 0;
             using (Account account = listAccount.Where(x => x.currency.Equals("KRW")).FirstOrDefault())
             {
-                dblKRW = account.balance + account.locked;
-                dblTotal += dblKRW;
+                //double quantity = account.balance + account.locked;
+                //double price = account.avg_buy_price;
+                //total += quantity;
                 listAccount.Remove(account);
             }
             foreach (KeyValuePair<string, Coin> items in dictStrCoin)
@@ -104,12 +110,14 @@ namespace upbit.Controller
                         items.Value.AvgPrice = account.avg_buy_price;
                         items.Value.Profit = CalculateProfit(items.Value.AvgPrice, items.Value.CurPrice);
                         double curValue = items.Value.Quantity * items.Value.CurPrice;
-                        dblTotal += curValue;
+                        //total += curValue;
 
                         using (CoinAccount ca = new CoinAccount(items.Key, items.Value.Profit, items.Value.Quantity, items.Value.CurPrice, items.Value.AvgPrice))
                         {
                             ehUpdateCoinAccount?.Invoke(this, ca);
                         }
+
+                        //}
                     }
                     else
                     {
@@ -123,7 +131,37 @@ namespace upbit.Controller
                     //items.Value.dblProfit = CalculateProfit(items.Value.dblAvgPrice, items.Value.dblCurPrice);
                 }
             }
-            ehUpdateTotalAsset?.Invoke(this, dblTotal);
+        }
+
+        public void GetMyTotalAsset(List<Account> totalAccounts)
+        {
+            double total = 0;
+            foreach (Account account in totalAccounts)
+            {
+                double quantity = account.balance + account.locked;
+                double price = account.avg_buy_price;
+                double curValue;
+                bool bKoreanWonAdded = false;
+                if (!bKoreanWonAdded)
+                {
+                    if (account.currency == "KRW")
+                    {
+                        curValue = quantity;
+                        bKoreanWonAdded = true;
+                    }
+                    else
+                    {
+                        curValue = price * quantity;
+                    }
+                }
+                else
+                {
+                    curValue = price * quantity;
+                }
+
+                total += curValue;
+            }
+            ehUpdateTotalAsset?.Invoke(this, total);
         }
 
         private double CalculateProfit(double dblOpen, double dblClose)
@@ -131,9 +169,45 @@ namespace upbit.Controller
             return Math.Round(100 * ((dblClose / dblOpen) - 1), 2);
         }
 
-        private void BeforeGoRunning()
+        private async Task BeforeGoRunning()
         {
             dictStrCoin.Clear();
+            Task<List<Account>> accountTask = m_API.GetAccount();
+            List<Account> registeredAccountList = await accountTask;
+            string[] selectedMarketInfos = this.m_SelectMarketInfo.Split(',');
+
+            bool bKoreanWonDone = false;
+            for (int index = 0; index < registeredAccountList.Count(); index++)
+            {
+                StringBuilder strBuilder = new StringBuilder();
+                strBuilder.AppendFormat(registeredAccountList[index].currency);
+                string marketKey = strBuilder.ToString();
+                if(!bKoreanWonDone)
+                {
+                    if (marketKey == "KRW")
+                    {
+                        bKoreanWonDone = true;
+                        continue;
+                    }
+                }
+                bool bAccountCoinAlreadySelected = false;
+                for(int coinIdx = 0; coinIdx < selectedMarketInfos.Count(); coinIdx++)
+                {
+                    if (selectedMarketInfos[coinIdx].Contains(marketKey))
+                    {
+                        bAccountCoinAlreadySelected = true;
+                        break;
+                    }
+                }
+                if(!bAccountCoinAlreadySelected)
+                {
+                    StringBuilder newSelectBuilder = new StringBuilder(m_SelectMarketInfo);
+                    newSelectBuilder.Append(",");
+                    newSelectBuilder.Append("KRW-");
+                    newSelectBuilder.Append(marketKey);
+                    m_SelectMarketInfo = newSelectBuilder.ToString();
+                }
+            }
         }
     }
 

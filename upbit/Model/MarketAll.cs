@@ -12,6 +12,5 @@ namespace upbit.UpbitAPI.Model {
         public string english_name;
         public string market_warning;
         public string LetsSeeWhathappens;
-
     }
 }

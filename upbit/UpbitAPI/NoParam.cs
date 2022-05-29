@@ -66,7 +66,7 @@ namespace upbit.UpbitAPI
             request.AddHeader("Authorization", token);
             token = null;
 
-            var response = await client.ExecuteAsync(request); // 요청을 서버측에 보내 응답을 받음
+            IRestResponse response = await client.ExecuteAsync(request); // 요청을 서버측에 보내 응답을 받음
             if (response.IsSuccessful)
             {
                 return response.Content;
