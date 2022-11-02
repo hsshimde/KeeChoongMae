@@ -6,21 +6,45 @@ using System.Threading.Tasks;
 
 namespace upbit.UpbitAPI.Model
 {
+    using upbit.View;
     public class CoinAccount : IDisposable
     {
-        public string strMarketCode { get; set; }
-        public double dblProfit { get; set; }
-        public double dblQuantity { get; set; }
-        public double dblCurPrice { get; set; }
-        public double dblAvgPrice { get; set; }
+        public string MarketCode { get; set; }
+        public double ProfitPercentageBuy { get; set; }
+        public double ProfitPercentageCompare24H { get; set; }
+        public double Quantity { get; set; }
+        public double  CurPrice { get; set; }
+        public double AvgBuyPrice { get; set; }
 
-        public CoinAccount(string strMarketCode, double dblProfit, double dblQuan, double dblCurPrice, double dblAvgPrice)
+        public string CoinNameKor { get; set; }
+        public string CoinNameEng { get; set; }
+
+        public double CurNetValue { get; set; }
+
+        public EGridKind GridKind { get; set; }
+
+        public int GridRowNumber { get; set; }
+
+        public CoinAccount(string MarketCode, double Profit, double Quantity, double CurPrice, double AvgPrice)
         {
-            this.strMarketCode = strMarketCode;
-            this.dblProfit = dblProfit;
-            this.dblQuantity = dblQuan;
-            this.dblCurPrice = dblCurPrice;
-            this.dblAvgPrice = dblAvgPrice; 
+            this.MarketCode = MarketCode;
+            this.ProfitPercentageBuy = Profit;
+            this.Quantity = Quantity;
+            this.CurPrice = CurPrice;
+            this.AvgBuyPrice = AvgPrice;
+            string[] marketCodeSep = MarketCode.Split('-');
+            if (marketCodeSep[0] == "KRW")
+            {
+                this.GridKind = EGridKind.KRW;
+            }
+            else if (marketCodeSep[0] == "BTC")
+            {
+                this.GridKind = EGridKind.BTC;
+            }
+            else if (marketCodeSep[0] == "USDT")
+            {
+                this.GridKind = EGridKind.USDT;
+            }
         }
         public void Dispose()
         {

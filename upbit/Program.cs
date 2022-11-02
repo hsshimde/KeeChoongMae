@@ -13,22 +13,20 @@ namespace upbit
         /// 해당 응용 프로그램의 주 진입점입니다.
         /// </summary>
         [STAThread]
-        static void Main()
+        public static void Main()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             LogInForm logInForm = new LogInForm();
             Application.Run(logInForm);
 
-            if (logInForm.BLogInFlag)
+            if (logInForm.BIsLoggedIn)
             {
-                Application.Run(new MainForm(logInForm.GetUpbitAPI()));
+                MainForm main = new MainForm(logInForm.GetUpbitAPI());
+                main.Init();
+                //await main.Init();
+                Application.Run(main);
             }
-
-            //SelectCoinForm selectCoinForm = new SelectCoinForm();
-            //Application.Run(selectCoinForm);
-
-
         }
 
 

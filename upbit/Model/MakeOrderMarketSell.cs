@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace upbit.UpbitAPI.Model {
-    public class MakeOrderMarketSell : IDisposable {
+namespace upbit.UpbitAPI.Model
+{
+    public class MakeOrderMarketSell : IDisposable
+    {
 
         public string uuid;
         public string side;

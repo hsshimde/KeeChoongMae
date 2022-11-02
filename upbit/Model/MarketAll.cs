@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace upbit.UpbitAPI.Model {
+namespace upbit.UpbitAPI.Model
+{
     public class MarketAll
     {
         public string market;

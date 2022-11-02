@@ -19,7 +19,7 @@ namespace upbit.View
     public partial class LogInForm : Form
     {
         private APIClass API;
-        public bool BLogInFlag { get; set; }
+        public bool BIsLoggedIn { get; set; }
         private static string SECTION_NAME = "OpenAPIKey";
         private static string SHOULD_SAVE = "SHOULD_SAVE";
         private static string NO_NEED_TO_SAVE = "NO_NEED_TO_SAVE";
@@ -43,7 +43,6 @@ namespace upbit.View
             string root = Application.StartupPath;
             int nLastIdx = root.LastIndexOf('\\');
             int nFolderIdx = root.LastIndexOf('\\', nLastIdx - 1);
-            //string strINIFilePath = root;
 
             StringBuilder sbINIFilePath = new StringBuilder(root);
             sbINIFilePath.Remove(nFolderIdx, root.Length - nFolderIdx);
@@ -118,7 +117,8 @@ namespace upbit.View
 
         }
 
-        private void FormLoadEvent(object sender, EventArgs e)
+
+        private void LoadINIInfo()
         {
             string root = Application.StartupPath;
             int nLastIdx = root.LastIndexOf('\\');
@@ -154,7 +154,11 @@ namespace upbit.View
 
             sbReadKey = null;
             iniKeyFile = null;
+        }
 
+        private void FormLoadEvent(object sender, EventArgs e)
+        {
+            LoadINIInfo();
         }
 
         private async Task<bool> LogIn()
@@ -199,15 +203,15 @@ namespace upbit.View
             if (sender.Equals(button_LogIn))
             {
                 Task<bool> loginTask = LogIn();
-                BLogInFlag = await loginTask;
-                if(BLogInFlag)
+                BIsLoggedIn = await loginTask;
+                if (BIsLoggedIn)
                 {
                     Close();
                 }
 
                 else
                 {
-                    MessageBox.Show("로그인에 실패하였습니다");
+                    MessageBox.Show("로그인에 실패 하였습니다");
                     //if(m_dlgNoConnection == null)
                     //{
                     //    m_dlgNoConnection = new ConnectionNoWorkDialogue();
@@ -218,7 +222,7 @@ namespace upbit.View
                     //{
                     //    m_dlgNoConnection.Focus();
                     //}
-
+                    //
                 }
 
             }

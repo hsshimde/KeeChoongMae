@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace upbit.UpbitAPI.Model {
-    public  class Ticker : IDisposable {
+namespace upbit.UpbitAPI.Model
+{
+    public  class Ticker : IDisposable
+    {
         public string market;
         public string trade_date;
         public string trade_time;
@@ -23,7 +25,6 @@ namespace upbit.UpbitAPI.Model {
         public double signed_change_rate;
         public double trade_volume;
         public double acc_trade_price;
-        public double acc_trade_price_;
         public double acc_trade_volume;
         public double acc_trade_volume_24h;
         public double highest_52_week_price;
@@ -31,6 +32,7 @@ namespace upbit.UpbitAPI.Model {
         public double lowest_52_week_price;
         public string lowest_52_week_date;
         public long timestamp;
+        public double acc_trade_price_24h;
 
         public void Dispose() { }
     }

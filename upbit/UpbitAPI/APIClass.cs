@@ -20,34 +20,7 @@ namespace upbit.UpbitAPI
             mWithParam= new Param(upbitAccesKey, upbitSecretKey);
             mNoParam = new NoParam(upbitAccesKey, upbitSecretKey);
         }
-
-        //public string GetAccount()
-        //{
-        //    return mNoParam.Get("/v1/accounts", RestSharp.Method.GET);
-        //}
-
-        //public List<Account> GetAccountAsync()
-        //{
-        //    string data = string.Empty;
-        //    mNoParam.GetAsync("/v1/accounts", RestSharp.Method.GET, data);
-        //    mNoParam.GetAsync("/v1/accounts", RestSharp.Method.GET, data);
-        //    if(data!=null)
-        //    {
-        //        return JsonConvert.DeserializeObject<List<Account>>(data);
-        //    }
-        //    else
-        //    {
-        //        return null; 
-        //    }
-        //    //if (sbReturn != null)
-        //    //{
-        //    //}
-        //    //else
-        //    //{
-        //    //    return null;
-        //    //}
-
-        //}
+       
         public async Task<List<Account>> GetAccount()
         {
             // 자산 - 전체 계좌 조회
@@ -68,7 +41,6 @@ namespace upbit.UpbitAPI
         {
             Dictionary<string, string> parameters = new Dictionary<string, string>();
             parameters.Add("market", market);
-            //return mWithParam.Get("/v1/orders/chance", parameters, RestSharp.Method.GET);
             StringBuilder sbReturn = new StringBuilder();
             Task<string> dataTask =  mWithParam.Get("/v1/orders/chance", parameters, RestSharp.Method.GET);
             string data = await dataTask;

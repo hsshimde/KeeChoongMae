@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace upbit.UpbitAPI.Model {
-    public class CancelOrder : IDisposable {
+namespace upbit.UpbitAPI.Model
+{
+    public class CancelOrder : IDisposable
+    {
 
         public string uuid;
         public string side;

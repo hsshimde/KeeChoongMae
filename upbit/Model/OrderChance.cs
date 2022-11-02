@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace upbit.UpbitAPI.Model {
-    public class OrderChance : IDisposable {
+namespace upbit.UpbitAPI.Model
+{
+    public class OrderChance : IDisposable
+    {
 
         public double bid_fee;
         public double ask_fee;
@@ -13,7 +15,8 @@ namespace upbit.UpbitAPI.Model {
         public OrderChanceAccount bid_account;
         public OrderChanceAccount ask_account;
 
-        public class MarketInfo {
+        public class MarketInfo
+        {
 
             public string id;
             public string name;
@@ -24,7 +27,8 @@ namespace upbit.UpbitAPI.Model {
             public double max_total;
             public string state;
 
-            public class MarketBidAsk{
+            public class MarketBidAsk
+            {
                 public string currency;
                 public string price_unit;
                 public double min_total;

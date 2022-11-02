@@ -86,18 +86,18 @@ namespace upbit.View
 
         private void ClearCoinAccountDataGrid()
         {
-            dataGridView_Account.Rows.Clear();
+            //dataGridView_Account.Rows.Clear();
         }
         
         private void CleareMonitoringDataGrid()
         {
-            dataGridView_Monitoring.Rows.Clear();
+            dgvMarketInterestCoin.Rows.Clear();
         }
 
         private void ClearDataGrid()
         {
-            dataGridView_Monitoring.Rows.Clear();
-            dataGridView_Account.Rows.Clear();
+            dgvMarketInterestCoin.Rows.Clear();
+            //dataGridView_Account.Rows.Clear();
         }
 
         private void ResetKeeChoongMae()
@@ -120,32 +120,32 @@ namespace upbit.View
 
         private void FillAccountGridWithSelectedItems()
         {
-            dataGridView_Account.Rows.Clear();
-            //List<string> listCoinName = new List<string>();
-            //int nCoinNameStartIdx = 0;
-            int nCoinNameFoundIdx = m_SelectCoinName.IndexOf(",");
-            //int nMarketInfoStartIdx = 0;
-            int nMarketInfoFoundIdx = m_SelectMarketInfo.IndexOf(",");
+            ////dataGridView_Account.Rows.Clear();
+            ////List<string> listCoinName = new List<string>();
+            ////int nCoinNameStartIdx = 0;
+            //int nCoinNameFoundIdx = m_SelectCoinName.IndexOf(",");
+            ////int nMarketInfoStartIdx = 0;
+            //int nMarketInfoFoundIdx = m_SelectMarketInfo.IndexOf(",");
 
-            string[] marketInfos = m_SelectMarketInfo.Split(',');
-            string[] coinNames = m_SelectCoinName.Split(',');
+            //string[] marketInfos = m_SelectMarketInfo.Split(',');
+            //string[] coinNames = m_SelectCoinName.Split(',');
 
-            if(marketInfos.Count() < 1 || coinNames.Count() < 1)
-            {
-                dataGridView_Account.Rows.Clear();
-                return;
-            }
+            //if(marketInfos.Count() < 1 || coinNames.Count() < 1)
+            //{
+            //    dataGridView_Account.Rows.Clear();
+            //    return;
+            //}
 
-            for(int nIdx = 0; nIdx < marketInfos.Count(); nIdx++)
-            {
-                int nRow = dataGridView_Account.Rows.Add();
-                dataGridView_Account["account_coinName", nRow].Value = coinNames[nIdx];
-                dataGridView_Account["account_market", nRow].Value = marketInfos[nIdx];
-                dataGridView_Account["account_profit", nRow].Value = "-";
-                dataGridView_Account["account_quant", nRow].Value = "-";
-                dataGridView_Account["account_avgPrice", nRow].Value = "-";
-                dataGridView_Account["account_curPrice", nRow].Value = "-";
-            }
+            //for(int nIdx = 0; nIdx < marketInfos.Count(); nIdx++)
+            //{
+            //    int nRow = dataGridView_Account.Rows.Add();
+            //    dataGridView_Account["account_coinName", nRow].Value = coinNames[nIdx];
+            //    dataGridView_Account["account_market", nRow].Value = marketInfos[nIdx];
+            //    dataGridView_Account["account_profit", nRow].Value = "-";
+            //    dataGridView_Account["account_quant", nRow].Value = "-";
+            //    dataGridView_Account["account_avgPrice", nRow].Value = "-";
+            //    dataGridView_Account["account_curPrice", nRow].Value = "-";
+            //}
 
 
             //if(nCoinNameFoundIdx == -1)
@@ -188,7 +188,7 @@ namespace upbit.View
                 //coinNamesBuilder.AppendFormat(m_SelectCoinName);
                 //AddMonitoringGridCol(marketInfoBuilder, coinNamesBuilder);
                 //m_bIsRunning = true;
-                running.Go();
+                //running.Go();
                 toolStripButton_START.Enabled = false;
                 toolStripButton_SelectCoin.Enabled = false;
                 //marketInfoBuilder = null;
@@ -205,7 +205,7 @@ namespace upbit.View
 
         private void SelectTargetItems()
         {
-            m_selectCoinForm = new SelectCoinForm(this.m_API);
+            m_selectCoinForm = new SelectCoinForm(this.mAPI);
             m_selectCoinForm.FormClosing += this.OnFormClosingEvent;
             m_selectCoinForm.m_ehSaveSelectCoin += OnSaveSelectCoin;
             m_selectCoinForm.StartPosition = FormStartPosition.WindowsDefaultLocation;

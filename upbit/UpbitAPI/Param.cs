@@ -44,9 +44,13 @@ namespace upbit.UpbitAPI
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("Authorization", token);
 
-            queryStringSb.Clear(); queryStringSb = null;
-            tokenSb.Clear(); tokenSb = null;
-            parameters.Clear(); parameters = null;
+            queryStringSb.Clear();
+            queryStringSb = null;
+            tokenSb.Clear();
+            tokenSb = null;
+            parameters.Clear();
+            parameters = null;
+
             Task<IRestResponse> responseTask = client.ExecuteAsync(request);
             IRestResponse response = await responseTask;
 
@@ -59,47 +63,7 @@ namespace upbit.UpbitAPI
                 return null;
             }
 
-
-            //if (response.IsSuccessful)
-            //{
-
-            //}
-            //else
-            //{
-            //    //return null;
-            //}
         }
-        public async void GetAsync(string path, Dictionary<string, string> parameters, Method method, StringBuilder sbReturn)
-        {
-
-            StringBuilder queryStringSb = GetQueryString(parameters);
-            StringBuilder tokenSb = JWT_param(queryStringSb.ToString()); // 입력받은 변수를 JWT토큰으로 변환
-            string token = tokenSb.ToString();
-
-            queryStringSb.Insert(0, "?");      // 링크에 ?를 붙임으로 파라미터를 사용한다는 의미
-            queryStringSb.Insert(0, path);
-
-            // 여기까지오면 queryString는
-            // '/path?key1=value1&key2=value2 ....' 이러한 형태가 된다. 이것을 RestRequest에 넣어주면 된다.
-
-            var client = new RestClient(mBaseURL);       // RestSharp 클라이언트 생성
-            var request = new RestRequest(queryStringSb.ToString(), method);
-            request.AddHeader("Content-Type", "application/json");
-            request.AddHeader("Authorization", token);
-
-            queryStringSb.Clear(); queryStringSb = null;
-            tokenSb.Clear(); tokenSb = null;
-            parameters.Clear(); parameters = null;
-
-            var response = await client.ExecuteAsync(request);
-            if (response.IsSuccessful)
-            {
-                sbReturn.Clear();
-                sbReturn.AppendFormat(response.Content);
-            }
-            
-        }
-
         public StringBuilder GetQueryString(Dictionary<string, string> parameters)
         {
             // Dictionary 형태로 받은 key = value 형태를 
@@ -107,7 +71,10 @@ namespace upbit.UpbitAPI
             StringBuilder builder = new StringBuilder();
             foreach (KeyValuePair<string, string> pair in parameters)
             {
-                builder.Append(pair.Key).Append("=").Append(pair.Value).Append("&");
+                builder.Append(pair.Key);
+                builder.Append("=");
+                builder.Append(pair.Value);
+                builder.Append("&");
             }
 
             if (builder.Length > 0)
@@ -140,7 +107,6 @@ namespace upbit.UpbitAPI
             var credentials = new Microsoft.IdentityModel.Tokens.SigningCredentials(securityKey, "HS256");
             var header = new JwtHeader(credentials);
             var secToken = new JwtSecurityToken(header, payload);
-
             var jwtToken = new JwtSecurityTokenHandler().WriteToken(secToken);
 
             StringBuilder returnStr = new StringBuilder();

@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace upbit.UpbitAPI.Model {
-    public class CandleDay {
+namespace upbit.UpbitAPI.Model
+{
+    public class CandleDay
+    {
         public string market;
         public string candle_date_time_utc;
         public string candle_date_time_kst;

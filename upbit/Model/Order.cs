@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace upbit.UpbitAPI.Model {
-    public class Order : IDisposable {
+namespace upbit.UpbitAPI.Model
+{
+    public class Order : IDisposable
+    {
 
         public string uuid;
         public string side;
@@ -26,8 +28,8 @@ namespace upbit.UpbitAPI.Model {
 
 
 
-        public class Trades {
-
+        public class Trades
+        {
             public string market;
             public string uuid;
             public double price;
@@ -35,7 +37,6 @@ namespace upbit.UpbitAPI.Model {
             public double funds;
             public string side;
             public string created_at;
-
         }
 
         public void Dispose() { }
