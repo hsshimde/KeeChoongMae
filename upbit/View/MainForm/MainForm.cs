@@ -16,12 +16,13 @@ using upbit.ColumnNameBuilder;
 
 namespace upbit.View
 {
-    public enum EGridKind
+    public enum EMarketGridTabIdx
     {
         KRW,
         BTC,
         USDT,
-        Interest
+        Interest,
+        Count
     }
 
 
@@ -33,11 +34,14 @@ namespace upbit.View
         public ConnectionNoWorkDialogue m_dlgNoConnection { get; set; }
         public Dictionary<string, Coin> DictCoinInfo { get; private set; }
 
+        public Dictionary<string, Coin> DictCoinWithSymbol;
+
 
 
         public MainForm(APIClass api)
         {
             InitializeComponent();
+            this.mbCoinSymbolNameInitialized = false;
             this.bCoinSelectDone = false;
             this.mAPI = api;
             this.running = new Running(api, this);
@@ -45,6 +49,19 @@ namespace upbit.View
             SetCallBackFunction();
             DictCoinInfo = new Dictionary<string, Coin>();
             DictCoinAccount = new Dictionary<string, CoinAccount>();
+            DictCoinWithSymbol = new Dictionary<string, Coin>();
+            ListCoinNameSymbolKRW = new List<string>();
+            ListCoinNameSymbolBTC = new List<string>();
+            ListCoinNameSymbolUSDT = new List<string>();
+            ListCoinNameSymbolInterset = new List<string>();
+
+            DictCoinByRowNumMarketBTC = new Dictionary<int, Coin>();
+            DictCoinByRowNumMarketKRW = new Dictionary<int, Coin>();
+            DictCoinByRowNumMarketUSDT = new Dictionary<int, Coin>();
+            DictCoinByRowNumMarketInterest = new Dictionary<int, Coin>();
+
+
+            
         }
 
         public async void Init()
@@ -79,6 +96,8 @@ namespace upbit.View
             SetDataGridViewColMiddleCenter(dgvmyAssetUSDT);
         }
 
+
+
         private async Task DivideMarketGridByUnitCurrnecy()
         {
             Task<List<MarketAll>> allMarketInfoTask = mAPI.GetMarketAll();
@@ -88,28 +107,44 @@ namespace upbit.View
             {
                 string marketName = marketInfo.market;
                 string[] currency = marketName.Split('-');
-                EGridKind gridType = new EGridKind();
+                EMarketGridTabIdx gridType = new EMarketGridTabIdx();
                 if (currency[0] == "KRW")
                 {
-                    gridType = EGridKind.KRW;
+                    gridType = EMarketGridTabIdx.KRW;
                 }
                 else if (currency[0] == "BTC")
                 {
-                    gridType = EGridKind.BTC;
+                    gridType = EMarketGridTabIdx.BTC;
                 }
                 else if (currency[0] == "USDT")
                 {
-                    gridType = EGridKind.USDT;
+                    gridType = EMarketGridTabIdx.USDT;
                 }
-                Coin coin = new Coin(marketInfo.market, marketInfo.korean_name, marketInfo.english_name);
-                coin.GridKind = gridType;
+                Coin coin = new Coin(marketInfo.market, marketInfo.korean_name, marketInfo.english_name, this);
+                coin.MarketGridTabIdx = gridType;
                 AddMarketInfo(gridType, coin);
                 DictCoinInfo.Add(coin.MarketCode, coin);
                 tickerRequestBuilder.AppendFormat(marketInfo.market);
                 tickerRequestBuilder.AppendFormat(",");
             }
+            mbCoinSymbolNameInitialized = true;
             tickerRequestBuilder.Length--;
             running.allMarketCode = tickerRequestBuilder.ToString();
+
+            foreach (KeyValuePair<string, Coin> kvp in DictCoinInfo)
+            {
+                Coin coin = kvp.Value;
+                if(coin.MarketGridTabIdx == EMarketGridTabIdx.KRW)
+                {
+                    StringBuilder sbCoinDesc = new StringBuilder();
+                    sbCoinDesc.AppendFormat(coin.CoinNameKor);
+                    sbCoinDesc.Append("(");
+                    sbCoinDesc.Append(coin.MarketCode);
+                    sbCoinDesc.Append(")");
+                    comboBox_selectMarket.Items.Add(sbCoinDesc.ToString());
+                }
+
+            }
             //foreach (MarketAll marketInfo in allMarketInfo)
             //{
             //}
@@ -127,39 +162,41 @@ namespace upbit.View
             //        tickerCoin.AccumulateTradePrice = tickerInfo.acc_trade_price;
             //    }
             //}
-
-
         }
 
-        private void AddMarketInfo(EGridKind gridType, Coin coin)
+        private void AddMarketInfo(EMarketGridTabIdx gridType, Coin coin)
         {
             StringBuilder coinMakretNameBuilder = new StringBuilder();
             coinMakretNameBuilder.AppendFormat(coin.CoinNameKor);
             coinMakretNameBuilder.AppendFormat("(");
             coinMakretNameBuilder.AppendFormat(coin.MarketCode);
             coinMakretNameBuilder.AppendFormat(")");
+            string coinNameSymbol = coinMakretNameBuilder.ToString();
+            coin.CoinNameSymbol = coinNameSymbol;
             ColNameBuilder colBuilder = new ColNameBuilder();
             colBuilder.ColItem = ColNameBuilder.EColItem.MarketCode;
             colBuilder.GridType = ColNameBuilder.EGridType.market;
-
-            if (gridType == EGridKind.KRW)
+            List<string> listCoinSymbol = null;
+            if (gridType == EMarketGridTabIdx.KRW)
             {
-                //colBuilder
-                colBuilder.UnitCurrency= ColNameBuilder.EUnitCurrency.KRW;
+                listCoinSymbol = ListCoinNameSymbolKRW;
+                colBuilder.UnitCurrency = ColNameBuilder.EUnitCurrency.KRW;
                 int rowIdx = dgvMarketKRW.Rows.Add();
                 coin.GridRowNumber = rowIdx;
                 //dgvMarketKRW["marketKRWMarketCode", rowIdx].Value = coinMakretNameBuilder.ToString();
                 dgvMarketKRW[colBuilder.BuildColName(), rowIdx].Value = coinMakretNameBuilder.ToString();
             }
-            else if (gridType == EGridKind.BTC)
+            else if (gridType == EMarketGridTabIdx.BTC)
             {
+                listCoinSymbol = ListCoinNameSymbolBTC;
                 colBuilder.UnitCurrency = ColNameBuilder.EUnitCurrency.BTC;
                 int rowIdx = dgvMarketBTC.Rows.Add();
                 coin.GridRowNumber = rowIdx;
                 dgvMarketBTC[colBuilder.BuildColName(), rowIdx].Value = coinMakretNameBuilder.ToString();
             }
-            else if (gridType == EGridKind.USDT)
+            else if (gridType == EMarketGridTabIdx.USDT)
             {
+                listCoinSymbol = ListCoinNameSymbolUSDT;
                 int rowIdx = dgvMarketUSDT.Rows.Add();
                 coin.GridRowNumber = rowIdx;
                 colBuilder.UnitCurrency = ColNameBuilder.EUnitCurrency.USDT;
@@ -170,46 +207,52 @@ namespace upbit.View
             {
                 Debug.Assert(false);
             }
-
+            if(!mbCoinSymbolNameInitialized)
+            {
+                DictCoinWithSymbol.Add(coinNameSymbol, coin);
+                listCoinSymbol.Add(coinNameSymbol);
+            }
             colBuilder = null;
-
 
         }
 
 
         private void OnDataGridViewSorted(object sender, EventArgs e)
         {
-            EGridKind gridType = new EGridKind();
+            EMarketGridTabIdx gridType = new EMarketGridTabIdx();
             if (sender.Equals(dgvMarketKRW))
             {
-                gridType = EGridKind.KRW;
+                gridType = EMarketGridTabIdx.KRW;
             }
             else if (sender.Equals(dgvMarketBTC))
             {
-                gridType = EGridKind.BTC;
+                gridType = EMarketGridTabIdx.BTC;
             }
             else if (sender.Equals(dgvMarketUSDT))
             {
-                gridType = EGridKind.USDT;
+                gridType = EMarketGridTabIdx.USDT;
             }
             else if (sender.Equals(dgvMarketInterestCoin))
             {
-                gridType = EGridKind.Interest;
+                gridType = EMarketGridTabIdx.Interest;
             }
             updateCoinRowNumber(gridType);
         }
 
-        private void updateCoinRowNumber(EGridKind gridKind)
+        private void updateCoinRowNumber(EMarketGridTabIdx gridKind)
         {
             //StringBuilder marketCodeBuilder = new StringBuilder();
+            ColNameBuilder colBuilder = new ColNameBuilder();
+            colBuilder.GridType = ColNameBuilder.EGridType.market;
+            colBuilder.ColItem = ColNameBuilder.EColItem.MarketCode;
             switch (gridKind)
             {
-                case EGridKind.KRW:
+                case EMarketGridTabIdx.KRW:
                     {
-
+                        colBuilder.UnitCurrency = ColNameBuilder.EUnitCurrency.KRW;
                         foreach (DataGridViewRow row in dgvMarketKRW.Rows)
                         {
-                            string marketName = row.Cells["KRW_marketInfo"].Value.ToString();
+                            string marketName = row.Cells[colBuilder.BuildColName()].Value.ToString();
                             string[] marketCode = marketName.Split('(');
                             string[] marketCodeLatter = marketCode[1].Split(')');
                             string realMarketCode = marketCodeLatter[0];
@@ -221,11 +264,12 @@ namespace upbit.View
                     }
                     break;
 
-                case EGridKind.BTC:
+                case EMarketGridTabIdx.BTC:
                     {
+                        colBuilder.UnitCurrency = ColNameBuilder.EUnitCurrency.BTC;
                         foreach (DataGridViewRow row in dgvMarketBTC.Rows)
                         {
-                            string marketName = row.Cells["BTC_marketInfo"].Value.ToString();
+                            string marketName = row.Cells[colBuilder.BuildColName()].Value.ToString();
                             string[] marketCode = marketName.Split('(');
                             string[] marketCodeLatter = marketCode[1].Split(')');
                             string realMarketCode = marketCodeLatter[0];
@@ -236,11 +280,12 @@ namespace upbit.View
                     }
                     break;
 
-                case EGridKind.USDT:
+                case EMarketGridTabIdx.USDT:
                     {
+                        colBuilder.UnitCurrency = ColNameBuilder.EUnitCurrency.USDT;
                         foreach (DataGridViewRow row in dgvMarketUSDT.Rows)
                         {
-                            string marketName = row.Cells["USDT_marketInfo"].Value.ToString();
+                            string marketName = row.Cells[colBuilder.BuildColName()].Value.ToString();
                             string[] marketCode = marketName.Split('(');
                             string[] marketCodeLatter = marketCode[1].Split(')');
                             string realMarketCode = marketCodeLatter[0];
@@ -251,7 +296,7 @@ namespace upbit.View
                     }
                     break;
 
-                case EGridKind.Interest:
+                case EMarketGridTabIdx.Interest:
                     {
                         //gridView = dataGridView_Interested;
                         //marketCodeBuilder.AppendFormat("Interested_");
@@ -282,28 +327,46 @@ namespace upbit.View
         }
 
 
-        private void OnDataGridViewSortCompare(object sender,
+        private void OnMarketDataGridViewSortCompare(object sender,
        DataGridViewSortCompareEventArgs e)
         {
-            string[] colNames = e.Column.Name.Split('_');
+            //string[] colNames = e.Column.Name.Split('_');
+            string colName = e.Column.Name;
+            //ColNameBuilder clmNameBuilder = new ColNameBuilder();
             double cellVal1 = 0.0;
             double cellVal2 = 0.0;
-            if(e.CellValue1 == null || e.CellValue2 == null)
+            if (e.CellValue1 == null || e.CellValue2 == null)
             {
                 return;
             }
             string strCellVal1 = e.CellValue1.ToString();
             string strCellVal2 = e.CellValue2.ToString();
-            if (colNames[1] == "24H")
+
+            if (colName.Contains(ColNameBuilder.EColItem.Compare24H.ToString()))
             {
                 strCellVal1 = strCellVal1.Remove(strCellVal1.Length - 1);
                 strCellVal2 = strCellVal2.Remove(strCellVal2.Length - 1);
             }
-            else if (colNames[1] == "transPrice")
+            else if (colName.Contains(ColNameBuilder.EColItem.TransVolume.ToString()))
             {
                 strCellVal1 = strCellVal1.Substring(0, strCellVal1.Length - 2);
                 strCellVal2 = strCellVal2.Substring(0, strCellVal2.Length - 2);
-            } 
+            }
+            else
+            {
+                return;
+            }
+
+            //if (colNames[1] == "24H")
+            //{
+            //    strCellVal1 = strCellVal1.Remove(strCellVal1.Length - 1);
+            //    strCellVal2 = strCellVal2.Remove(strCellVal2.Length - 1);
+            //}
+            //else if (colNames[1] == "transPrice")
+            //{
+            //    strCellVal1 = strCellVal1.Substring(0, strCellVal1.Length - 2);
+            //    strCellVal2 = strCellVal2.Substring(0, strCellVal2.Length - 2);
+            //} 
             //else if(colNames[1]=="marketInfo")
             //{
 
@@ -352,5 +415,11 @@ namespace upbit.View
                 m_dlgNoConnection.Focus();
             }
         }
+
+        //private void dgvMarketKRW_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        //{
+
+        //}
+
     }
 }

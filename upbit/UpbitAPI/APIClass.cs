@@ -79,7 +79,15 @@ namespace upbit.UpbitAPI
 
             Task<string> dataTask = mWithParam.Get("/v1/orders", parameters, RestSharp.Method.POST);
             string data = await dataTask;
-            return JsonConvert.DeserializeObject<MakeOrder>(data);
+            if(data !=null)
+            {
+                return JsonConvert.DeserializeObject<MakeOrder>(data);
+
+            }
+            else
+            {
+                return null;
+            }
         }
         public async Task<MakeOrderMarketBuy> MakeOrderMarketBuy(string market, double price)
         {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using upbit.Model;
 
 namespace upbit.UpbitAPI.Model
 {
@@ -24,6 +25,7 @@ namespace upbit.UpbitAPI.Model
         public double locked;
         public double executed_volume;
         public int trade_count;
+        public Error error;
 
         public void Dispose() { }
     }

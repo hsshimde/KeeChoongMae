@@ -28,7 +28,7 @@ namespace upbit.View
             string[] coinNamesArray = coinNames.Split(',');
             int nArraySize = marketArray.Count();
             Debug.Assert(coinNamesArray.Count() == nArraySize);
-            for(int nIdx = 0; nIdx < nArraySize; nIdx++)
+            for (int nIdx = 0; nIdx < nArraySize; nIdx++)
             {
                 int row = dgvMarketInterestCoin.Rows.Add();
                 dgvMarketInterestCoin["Monitoring_marketInfo", row].Value = marketArray[nIdx];
@@ -38,72 +38,76 @@ namespace upbit.View
 
         private void OnMonitoringEvent(object sender, Monitoring e)
         {
-            if(dgvMarketInterestCoin.InvokeRequired)
+            if (dgvMarketInterestCoin.InvokeRequired)
             {
                 dgvMarketInterestCoin.Invoke((MethodInvoker)delegate ()
                 {
                     IEnumerable<DataGridViewRow> updateRowEnum = dgvMarketInterestCoin.Rows.Cast<DataGridViewRow>();
                     DataGridViewRow updateRow = updateRowEnum.Where(x => x.Cells["Monitoring_marketInfo"].Value.Equals(e.MarketInfo)).FirstOrDefault();
-                    if (updateRow!= null)
+                    if (updateRow != null)
                     {
                         updateRow.Cells["Monitoring_curPrice"].Value = e.CurPrice;
                         updateRow.Cells["Monitoring_24H"].Value = e._24Hour.ToString("N2");
                     }
 
                 });
-                
+
             }
         }
 
         private void OnUpdateTickerEvent(object sender, Coin coin)
         {
-            EGridKind eGridKind = coin.GridKind;
+            EMarketGridTabIdx eGridKind = coin.MarketGridTabIdx;
             ColNameBuilder colBuilder = new ColNameBuilder();
             colBuilder.GridType = ColNameBuilder.EGridType.market;
             switch (eGridKind)
             {
-                case EGridKind.BTC:
+                case EMarketGridTabIdx.BTC:
                     {
-                        if(dgvMarketBTC.InvokeRequired)
+                        if (dgvMarketBTC.InvokeRequired)
                         {
                             dgvMarketBTC.Invoke((MethodInvoker)delegate ()
                             {
                                 //                updateRow.Cells["account_profit"].Style.ForeColor = Color.Tomato;
                                 colBuilder.UnitCurrency = ColNameBuilder.EUnitCurrency.BTC;
-                                Color foreColor;
-                                if (coin.Compare24H > 0)
+                                lock (dgvMarketBTC)
                                 {
-                                    foreColor = Color.Tomato;
 
-                                }
-                                else if (coin.Compare24H == 0.0f)
-                                {
-                                    foreColor = Color.Black;
-                                }
-                                else
-                                {
-                                    foreColor = Color.DodgerBlue;
-                                }
-                                //colBuilder.ColItem = ColNameBuilder.EColItem.CurPrice;
-                                //dgvMarketBTC[colBuilder.BuildColName(), coin.GridRowNumber].Style.ForeColor = Color.Black;
-                                //colBuilder.ColItem = ColNameBuilder.EColItem.Compare24H;
-                                //dgvMarketBTC[colBuilder.BuildColName(), coin.GridRowNumber].Style.ForeColor = Color.Black;
+                                    Color foreColor;
+                                    if (coin.Compare24H > 0)
+                                    {
+                                        foreColor = Color.Tomato;
 
-                                colBuilder.ColItem = ColNameBuilder.EColItem.CurPrice;
-                                dgvMarketBTC[colBuilder.BuildColName(), coin.GridRowNumber].Value = roundingForBTC(coin.CurPrice);
-                                dgvMarketBTC[colBuilder.BuildColName(), coin.GridRowNumber].Style.ForeColor = foreColor;
-                                colBuilder.ColItem = ColNameBuilder.EColItem.Compare24H;
-                                dgvMarketBTC[colBuilder.BuildColName(), coin.GridRowNumber].Value = coin.Compare24H + "%";
-                                dgvMarketBTC[colBuilder.BuildColName(), coin.GridRowNumber].Style.ForeColor = foreColor;
-                                colBuilder.ColItem = ColNameBuilder.EColItem.TransVolume;
-                                dgvMarketBTC[colBuilder.BuildColName(), coin.GridRowNumber].Value = roundingForTransBTC(coin.AccumulateTradePrice);
+                                    }
+                                    else if (coin.Compare24H == 0.0f)
+                                    {
+                                        foreColor = Color.Black;
+                                    }
+                                    else
+                                    {
+                                        foreColor = Color.DodgerBlue;
+                                    }
+                                    //colBuilder.ColItem = ColNameBuilder.EColItem.CurPrice;
+                                    //dgvMarketBTC[colBuilder.BuildColName(), coin.GridRowNumber].Style.ForeColor = Color.Black;
+                                    //colBuilder.ColItem = ColNameBuilder.EColItem.Compare24H;
+                                    //dgvMarketBTC[colBuilder.BuildColName(), coin.GridRowNumber].Style.ForeColor = Color.Black;
+                                    colBuilder.ColItem = ColNameBuilder.EColItem.CurPrice;
+                                    dgvMarketBTC[colBuilder.BuildColName(), coin.GridRowNumber].Value = roundingForBTC(coin.CurPrice);
+                                    dgvMarketBTC[colBuilder.BuildColName(), coin.GridRowNumber].Style.ForeColor = foreColor;
+                                    colBuilder.ColItem = ColNameBuilder.EColItem.Compare24H;
+                                    dgvMarketBTC[colBuilder.BuildColName(), coin.GridRowNumber].Value = coin.Compare24H + "%";
+                                    dgvMarketBTC[colBuilder.BuildColName(), coin.GridRowNumber].Style.ForeColor = foreColor;
+                                    colBuilder.ColItem = ColNameBuilder.EColItem.TransVolume;
+                                    dgvMarketBTC[colBuilder.BuildColName(), coin.GridRowNumber].Value = roundingForTransBTC(coin.AccumulateTradePrice);
+                                }
+
                             }
                             );
                         }
                     }
                     break;
 
-                case EGridKind.KRW:
+                case EMarketGridTabIdx.KRW:
                     {
                         if (dgvMarketKRW.InvokeRequired)
                         {
@@ -111,75 +115,82 @@ namespace upbit.View
                             {
                                 //                updateRow.Cells["account_profit"].Style.ForeColor = Color.Tomato;
                                 colBuilder.UnitCurrency = ColNameBuilder.EUnitCurrency.KRW;
+                                lock (dgvMarketKRW)
+                                {
 
-                                //dataGridView_KRW["KRW_marketInfo", coin.GridRowNumber].Value = coin.MarketCode;
-                                if (coin.Compare24H > 0)
-                                {
+                                    //dataGridView_KRW["KRW_marketInfo", coin.GridRowNumber].Value = coin.MarketCode;
+                                    if (coin.Compare24H > 0)
+                                    {
+                                        colBuilder.ColItem = ColNameBuilder.EColItem.CurPrice;
+                                        dgvMarketKRW[colBuilder.BuildColName(), coin.GridRowNumber].Style.ForeColor = Color.Tomato;
+                                        colBuilder.ColItem = ColNameBuilder.EColItem.Compare24H;
+                                        dgvMarketKRW[colBuilder.BuildColName(), coin.GridRowNumber].Style.ForeColor = Color.Tomato;
+                                    }
+                                    else if (coin.Compare24H == 0.0f)
+                                    {
+                                        colBuilder.ColItem = ColNameBuilder.EColItem.CurPrice;
+                                        dgvMarketKRW[colBuilder.BuildColName(), coin.GridRowNumber].Style.ForeColor = Color.Black;
+                                        colBuilder.ColItem = ColNameBuilder.EColItem.Compare24H;
+                                        dgvMarketKRW[colBuilder.BuildColName(), coin.GridRowNumber].Style.ForeColor = Color.Black;
+                                    }
+                                    else
+                                    {
+                                        colBuilder.ColItem = ColNameBuilder.EColItem.CurPrice;
+                                        dgvMarketKRW[colBuilder.BuildColName(), coin.GridRowNumber].Style.ForeColor = Color.DodgerBlue;
+                                        colBuilder.ColItem = ColNameBuilder.EColItem.Compare24H;
+                                        dgvMarketKRW[colBuilder.BuildColName(), coin.GridRowNumber].Style.ForeColor = Color.DodgerBlue;
+                                    }
                                     colBuilder.ColItem = ColNameBuilder.EColItem.CurPrice;
-                                    dgvMarketKRW[colBuilder.BuildColName(), coin.GridRowNumber].Style.ForeColor = Color.Tomato;
+                                    dgvMarketKRW[colBuilder.BuildColName(), coin.GridRowNumber].Value = roundingForKRW(coin.CurPrice);
                                     colBuilder.ColItem = ColNameBuilder.EColItem.Compare24H;
-                                    dgvMarketKRW[colBuilder.BuildColName(), coin.GridRowNumber].Style.ForeColor = Color.Tomato;
+                                    dgvMarketKRW[colBuilder.BuildColName(), coin.GridRowNumber].Value = coin.Compare24H + "%";
+                                    colBuilder.ColItem = ColNameBuilder.EColItem.TransVolume;
+                                    dgvMarketKRW[colBuilder.BuildColName(), coin.GridRowNumber].Value = roundingForTransKOR(coin.AccumulateTradePrice);
                                 }
-                                else if (coin.Compare24H == 0.0f)
-                                {
-                                    colBuilder.ColItem = ColNameBuilder.EColItem.CurPrice;
-                                    dgvMarketKRW[colBuilder.BuildColName(), coin.GridRowNumber].Style.ForeColor = Color.Black;
-                                    colBuilder.ColItem = ColNameBuilder.EColItem.Compare24H;
-                                    dgvMarketKRW[colBuilder.BuildColName(), coin.GridRowNumber].Style.ForeColor = Color.Black;
-                                }
-                                else
-                                {
-                                    colBuilder.ColItem = ColNameBuilder.EColItem.CurPrice;
-                                    dgvMarketKRW[colBuilder.BuildColName(), coin.GridRowNumber].Style.ForeColor = Color.DodgerBlue;
-                                    colBuilder.ColItem = ColNameBuilder.EColItem.Compare24H;
-                                    dgvMarketKRW[colBuilder.BuildColName(), coin.GridRowNumber].Style.ForeColor = Color.DodgerBlue;
-                                }
-                                colBuilder.ColItem = ColNameBuilder.EColItem.CurPrice;
-                                dgvMarketKRW[colBuilder.BuildColName(), coin.GridRowNumber].Value = roundingForKRW(coin.CurPrice);
-                                colBuilder.ColItem = ColNameBuilder.EColItem.Compare24H;
-                                dgvMarketKRW[colBuilder.BuildColName(), coin.GridRowNumber].Value = coin.Compare24H + "%";
-                                colBuilder.ColItem = ColNameBuilder.EColItem.TransVolume;
-                                dgvMarketKRW[colBuilder.BuildColName(), coin.GridRowNumber].Value = roundingForTransKOR(coin.AccumulateTradePrice);
                             }
                             );
                         }
                     }
                     break;
 
-                case EGridKind.USDT:
+                case EMarketGridTabIdx.USDT:
                     {
                         if (dgvMarketUSDT.InvokeRequired)
                         {
                             colBuilder.UnitCurrency = ColNameBuilder.EUnitCurrency.USDT;
                             dgvMarketUSDT.Invoke((MethodInvoker)delegate ()
                             {
-                                if (coin.Compare24H > 0)
+                                lock (dgvMarketUSDT)
                                 {
+
+                                    if (coin.Compare24H > 0)
+                                    {
+                                        colBuilder.ColItem = ColNameBuilder.EColItem.CurPrice;
+                                        dgvMarketUSDT[colBuilder.BuildColName(), coin.GridRowNumber].Style.ForeColor = Color.Tomato;
+                                        colBuilder.ColItem = ColNameBuilder.EColItem.Compare24H;
+                                        dgvMarketUSDT[colBuilder.BuildColName(), coin.GridRowNumber].Style.ForeColor = Color.Tomato;
+                                    }
+                                    else if (coin.Compare24H == 0.0f)
+                                    {
+                                        colBuilder.ColItem = ColNameBuilder.EColItem.CurPrice;
+                                        dgvMarketUSDT[colBuilder.BuildColName(), coin.GridRowNumber].Style.ForeColor = Color.Black;
+                                        colBuilder.ColItem = ColNameBuilder.EColItem.Compare24H;
+                                        dgvMarketUSDT[colBuilder.BuildColName(), coin.GridRowNumber].Style.ForeColor = Color.Black;
+                                    }
+                                    else
+                                    {
+                                        colBuilder.ColItem = ColNameBuilder.EColItem.CurPrice;
+                                        dgvMarketUSDT[colBuilder.BuildColName(), coin.GridRowNumber].Style.ForeColor = Color.DodgerBlue;
+                                        colBuilder.ColItem = ColNameBuilder.EColItem.Compare24H;
+                                        dgvMarketUSDT[colBuilder.BuildColName(), coin.GridRowNumber].Style.ForeColor = Color.DodgerBlue;
+                                    }
                                     colBuilder.ColItem = ColNameBuilder.EColItem.CurPrice;
-                                    dgvMarketUSDT[colBuilder.BuildColName(), coin.GridRowNumber].Style.ForeColor = Color.Tomato;
+                                    dgvMarketUSDT[colBuilder.BuildColName(), coin.GridRowNumber].Value = roundingForUSDT(coin.CurPrice);
                                     colBuilder.ColItem = ColNameBuilder.EColItem.Compare24H;
-                                    dgvMarketUSDT[colBuilder.BuildColName(), coin.GridRowNumber].Style.ForeColor = Color.Tomato;
+                                    dgvMarketUSDT[colBuilder.BuildColName(), coin.GridRowNumber].Value = coin.Compare24H + "%";
+                                    colBuilder.ColItem = ColNameBuilder.EColItem.TransVolume;
+                                    dgvMarketUSDT[colBuilder.BuildColName(), coin.GridRowNumber].Value = roundingForUSDT(coin.AccumulateTradePrice);
                                 }
-                                else if (coin.Compare24H == 0.0f)
-                                {
-                                    colBuilder.ColItem = ColNameBuilder.EColItem.CurPrice;
-                                    dgvMarketUSDT[colBuilder.BuildColName(), coin.GridRowNumber].Style.ForeColor = Color.Black;
-                                    colBuilder.ColItem = ColNameBuilder.EColItem.Compare24H;
-                                    dgvMarketUSDT[colBuilder.BuildColName(), coin.GridRowNumber].Style.ForeColor = Color.Black;
-                                }
-                                else
-                                {
-                                    colBuilder.ColItem = ColNameBuilder.EColItem.CurPrice;
-                                    dgvMarketUSDT[colBuilder.BuildColName(), coin.GridRowNumber].Style.ForeColor = Color.DodgerBlue;
-                                    colBuilder.ColItem = ColNameBuilder.EColItem.Compare24H;
-                                    dgvMarketUSDT[colBuilder.BuildColName(), coin.GridRowNumber].Style.ForeColor = Color.DodgerBlue;
-                                }
-                                colBuilder.ColItem = ColNameBuilder.EColItem.CurPrice;
-                                dgvMarketUSDT[colBuilder.BuildColName(), coin.GridRowNumber].Value = roundingForUSDT(coin.CurPrice);
-                                colBuilder.ColItem = ColNameBuilder.EColItem.Compare24H;
-                                dgvMarketUSDT[colBuilder.BuildColName(), coin.GridRowNumber].Value = coin.Compare24H + "%";
-                                colBuilder.ColItem = ColNameBuilder.EColItem.TransVolume;
-                                dgvMarketUSDT[colBuilder.BuildColName(), coin.GridRowNumber].Value = roundingForUSDT(coin.AccumulateTradePrice);
                             }
                             );
                         }

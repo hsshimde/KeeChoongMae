@@ -55,5 +55,6 @@ namespace upbit.ColumnNameBuilder
             sbToString.AppendFormat(ColItem.ToString());
             return sbToString.ToString();
         }
+
     }
 }

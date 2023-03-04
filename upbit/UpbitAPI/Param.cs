@@ -60,7 +60,7 @@ namespace upbit.UpbitAPI
             }
             else
             {
-                return null;
+                return response.Content;
             }
 
         }

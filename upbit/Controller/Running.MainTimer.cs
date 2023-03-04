@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using upbit.Model;
 using upbit.UpbitAPI;
 using upbit.UpbitAPI.Model;
 
@@ -33,6 +34,11 @@ namespace upbit.Controller
         private Dictionary<string, Coin> mDictSelectedMarketCode;
 
 
+        public bool BShouldUpdateAllMarket { get; private set; }
+
+        //public bool BSearchBox
+
+
         //private List<string> m_listMyAsset;
         //private Dictionary<string, Coin> m_dictMyAsset;
 
@@ -41,7 +47,7 @@ namespace upbit.Controller
         {
             Task<List<Account>> accountTask = mAPI.GetAccount();
             List<Account> myAssetAccount = await accountTask;
-            if (myAssetAccount!=null)
+            if (myAssetAccount != null)
             {
                 GetMyAsset(myAssetAccount);
             }
@@ -56,12 +62,24 @@ namespace upbit.Controller
             //    //m_MainForm.ConnectionNotWorking();
             //}
 
-            Console.WriteLine("Update Execution Complete");
+            //Console.WriteLine("Update Execution Complete");
         }
 
         public async Task DoUpdate()
         {
-            await updateAllTickerData();
+            if(BShouldUpdateAllMarket)
+            {
+                await updateAllTickerData();
+            }
+            else
+            {
+
+            }
+        }
+
+        public void SetUpdateAllMarketData(bool bShouldUpdate)
+        {
+            BShouldUpdateAllMarket = bShouldUpdate;
         }
 
 
@@ -107,12 +125,16 @@ namespace upbit.Controller
 
         private void InitializeRunning(APIClass api)
         {
-            this.m_MainTimer = new System.Timers.Timer();
-            this.m_MainTimer.Interval = 500; // 1000ms = 1 second
-            this.m_MainTimer.Elapsed += ElapsedEventReceiver;
+            this.mMainTimer = new System.Timers.Timer();
+            this.mMainTimer.Interval = 500; // 1000ms = 1 second
+            this.mMainTimer.Elapsed += ElapsedEventReceiver;
             mDictSelectedMarketCode = new Dictionary<string, Coin>();
             //DictMyAssetInfo = new Dictionary<string, CoinAccount>();
             this.mAPI = api;
+            this.mOrderTimer = new System.Timers.Timer();
+            this.mOrderTimer.Interval = 333;
+            this.mOrderTimer.Elapsed += ElapsedEventReceiver;
+            mInsertOrderQueue = new Queue<Model.MyOrder>();
         }
 
         private void GetTicker(List<Ticker> listTicker)
@@ -136,7 +158,7 @@ namespace upbit.Controller
                 }
                 else
                 {
-                    Coin coin = new Coin(item.market, item.market, item.market);
+                    Coin coin = new Coin(item.market, item.market, item.market, mMainForm);
                     coin.CurPrice = item.trade_price;
                     lock (mDictSelectedMarketCode)
                     {
@@ -144,9 +166,6 @@ namespace upbit.Controller
                     }
                 }
             });
-
-
-
         }
 
         private void SetCurrentAccountInfo(List<Account> listAccount)
@@ -179,7 +198,6 @@ namespace upbit.Controller
                 myCoinAccount.GridRowNumber = -1;
                 DictMyAssetInfo.Add(myCoinAccount.MarketCode, myCoinAccount); 
             }
-
         }
 
         private void GetAccountInfo(List<Account> listAccount)
@@ -291,6 +309,7 @@ namespace upbit.Controller
             //List<Account> myAssetAccount = await taskMyAssetAccount;
             //SetCurrentAccountInfo(myAssetAccount);
             //await Task;
+            BShouldUpdateAllMarket = true;
         }
 
         public async Task InitializeCoinAccountInfo()

@@ -10,6 +10,10 @@ using upbit.ColumnNameBuilder;
 
 namespace upbit.View
 {
+    internal class AccountEvent
+    {
+
+    }
     public partial class MainForm
     {
         private void OnEventAccountAdd(object sender, Account account)
@@ -26,12 +30,12 @@ namespace upbit.View
         }
         private void OnEventAccountUpdate(object sender, CoinAccount coinAccount)
         {
-            EGridKind eGridKind = coinAccount.GridKind;
+            EMarketGridTabIdx eGridKind = coinAccount.GridKind;
             ColNameBuilder colBuilder = new ColNameBuilder();
             colBuilder.GridType = ColNameBuilder.EGridType.myAsset;
             switch (eGridKind)
             {
-                case EGridKind.KRW:
+                case EMarketGridTabIdx.KRW:
                     {
                         if (dgvMyAssetKRW.InvokeRequired)
                         {
@@ -117,13 +121,13 @@ namespace upbit.View
                     break;
 
 
-                case EGridKind.BTC:
+                case EMarketGridTabIdx.BTC:
                     {
 
                     }
                     break;
 
-                case EGridKind.USDT:
+                case EMarketGridTabIdx.USDT:
                     {
 
                     }

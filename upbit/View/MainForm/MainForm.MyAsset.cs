@@ -11,6 +11,10 @@ using System.Diagnostics;
 
 namespace upbit.View
 {
+    internal class MyAsset
+    {
+
+    }
     public partial class MainForm
     {
 
@@ -21,7 +25,7 @@ namespace upbit.View
             Task<List<Account>> taskMyAccountList = mAPI.GetAccount();
             List<Account> allAssetInfo = await taskMyAccountList;
             StringBuilder sbMarketCodeBuilder = new StringBuilder();
-            EGridKind eGridKind = new EGridKind();
+            EMarketGridTabIdx eGridKind = new EMarketGridTabIdx();
 
             foreach (Account acc in allAssetInfo)
             {
@@ -38,15 +42,15 @@ namespace upbit.View
                 sbMarketCodeBuilder.AppendFormat(acc.currency);
                 if("KRW" == acc.unit_currency)
                 {
-                    eGridKind = EGridKind.KRW;
+                    eGridKind = EMarketGridTabIdx.KRW;
                 }
                 else if("BTC" == acc.unit_currency)
                 {
-                    eGridKind = EGridKind.BTC;
+                    eGridKind = EMarketGridTabIdx.BTC;
                 }
                 else if("USDT" == acc.unit_currency)
                 {
-                    eGridKind = EGridKind.USDT;
+                    eGridKind = EMarketGridTabIdx.USDT;
                 }
                 else
                 {
@@ -90,9 +94,18 @@ namespace upbit.View
 
 
             }
+            //foreach (KeyValuePair<string, CoinAccount> kvp in DictCoinAccount)
+            //{
+            //    StringBuilder sbCoinDesc = new StringBuilder();
+            //    sbCoinDesc.Append(kvp.Value.CoinNameKor);
+            //    sbCoinDesc.Append("(");
+            //    sbCoinDesc.Append(kvp.Key);
+            //    sbCoinDesc.Append(")");
+            //    comboBox_selectMarket.Items.Add(sbCoinDesc.ToString());
+            //}
         }
 
-        private void AddMyAssetInfo(EGridKind gridType, CoinAccount coinAccount)
+        private void AddMyAssetInfo(EMarketGridTabIdx gridType, CoinAccount coinAccount)
         {
             StringBuilder coinMarketNameBuilder = new StringBuilder();
             coinMarketNameBuilder.AppendFormat(coinAccount.CoinNameKor);
@@ -103,21 +116,21 @@ namespace upbit.View
             colBuilder.ColItem = ColNameBuilder.EColItem.MarketCode;
             colBuilder.GridType = ColNameBuilder.EGridType.myAsset;
 
-            if (gridType == EGridKind.KRW)
+            if (gridType == EMarketGridTabIdx.KRW)
             {
                 colBuilder.UnitCurrency = ColNameBuilder.EUnitCurrency.KRW;
                 int rowIdx = dgvMyAssetKRW.Rows.Add();
                 coinAccount.GridRowNumber = rowIdx;
                 dgvMyAssetKRW[colBuilder.BuildColName(), rowIdx].Value = coinMarketNameBuilder.ToString();
             }
-            else if (gridType == EGridKind.BTC)
+            else if (gridType == EMarketGridTabIdx.BTC)
             {
                 //colBuilder.UnitCurrency = ColNameBuilder.EUnitCurrency.BTC;
                 //int rowIdx = dgvMarketBTC.Rows.Add();
                 //coin.GridRowNumber = rowIdx;
                 //dgvMarketBTC[colBuilder.BuildColName(), rowIdx].Value = coinMarketNameBuilder.ToString();
             }
-            else if (gridType == EGridKind.USDT)
+            else if (gridType == EMarketGridTabIdx.USDT)
             {
                 //int rowIdx = dgvMarketUSDT.Rows.Add();
                 //coin.GridRowNumber = rowIdx;

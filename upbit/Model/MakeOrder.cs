@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using upbit.Model;
 
 namespace upbit.UpbitAPI.Model {
     public class MakeOrder : IDisposable {
@@ -11,7 +12,6 @@ namespace upbit.UpbitAPI.Model {
         public string side;
         public string ord_type;
         public double price;
-        public double avg_price;
         public string state;
         public string market;
         public string created_at;
@@ -22,9 +22,11 @@ namespace upbit.UpbitAPI.Model {
         public double paid_fee;
         public double locked;
         public double executed_volume;
-        public int trade_count;
+        public int trades_count;
+        //private Error error;
+        public Error error;
 
-
+        //internal Error Error { get => error; set => error = value; }
 
         public void Dispose() { }
     }

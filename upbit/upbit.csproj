@@ -104,16 +104,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ColumnNameBuilder\ColumnNameBuilder.cs" />
+    <Compile Include="Controller\OrderTimer.cs" />
     <Compile Include="Controller\Running.MainTimer.cs" />
     <Compile Include="Controller\Running.cs" />
+    <Compile Include="Enum\OrderState.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\MainForm\MainForm.MyAsset.cs">
-      <SubType>Form</SubType>
+    <Compile Include="Model\Error.cs" />
+    <Compile Include="Model\OrderQueue.cs" />
+    <Compile Include="View\MainForm\MainForm.AccountEvent.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\Account.cs" />
     <Compile Include="Model\Asset.cs" />
@@ -139,9 +143,6 @@
     <Compile Include="Util\INIUtil.cs" />
     <Compile Include="UpbitAPI\NoParam.cs" />
     <Compile Include="UpbitAPI\Param.cs" />
-    <Compile Include="View\MainForm\MainForm.AccountEvent.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="View\ConnectionNoWorkDialogue.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -160,8 +161,25 @@
     <Compile Include="View\MainForm\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\MainForm\MainForm.ToolStripButton.cs" />
-    <Compile Include="View\MainForm\MainForm.UpdateGrid.cs" />
+    <Compile Include="View\MainForm\MainForm.MyAsset.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\MainForm\MainForm.SearchBox.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\MainForm\MainForm.SettingTransaction.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\MainForm\MainForm.ToolStripButton.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\MainForm\MainForm.UpdateGrid.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\SelectCoinForm.cs">
       <SubType>Form</SubType>
     </Compile>

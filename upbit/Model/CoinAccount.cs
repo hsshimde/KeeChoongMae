@@ -21,7 +21,7 @@ namespace upbit.UpbitAPI.Model
 
         public double CurNetValue { get; set; }
 
-        public EGridKind GridKind { get; set; }
+        public EMarketGridTabIdx GridKind { get; set; }
 
         public int GridRowNumber { get; set; }
 
@@ -35,15 +35,15 @@ namespace upbit.UpbitAPI.Model
             string[] marketCodeSep = MarketCode.Split('-');
             if (marketCodeSep[0] == "KRW")
             {
-                this.GridKind = EGridKind.KRW;
+                this.GridKind = EMarketGridTabIdx.KRW;
             }
             else if (marketCodeSep[0] == "BTC")
             {
-                this.GridKind = EGridKind.BTC;
+                this.GridKind = EMarketGridTabIdx.BTC;
             }
             else if (marketCodeSep[0] == "USDT")
             {
-                this.GridKind = EGridKind.USDT;
+                this.GridKind = EMarketGridTabIdx.USDT;
             }
         }
         public void Dispose()
