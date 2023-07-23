@@ -12,8 +12,8 @@ namespace upbit.UpbitAPI
     using upbit.UpbitAPI.Model;
     public class APIClass
     {
-        private Param mWithParam;
-        private NoParam mNoParam;
+        private readonly Param mWithParam;
+        private readonly NoParam mNoParam;
 
         public APIClass(string upbitAccesKey, string upbitSecretKey)
         {
@@ -156,7 +156,11 @@ namespace upbit.UpbitAPI
             parameters.Add("count", count.ToString());
             Task<string> dataTask = mWithParam.Get("/v1/candles/days", parameters, RestSharp.Method.GET);
             string data = await dataTask;
-            return JsonConvert.DeserializeObject<List<CandleDay>>(data);
+            JsonSerializerSettings jsonSetting = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+            };
+            return JsonConvert.DeserializeObject<List<CandleDay>>(data, jsonSetting);
         }
         public async Task<List<CandleWeek>> GetCandleWeeks(string market, DateTime to = default(DateTime), int count = 1)
         {

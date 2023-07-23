@@ -68,7 +68,7 @@ namespace upbit.View
             }
             iniKeyFile.Write(INIFile.SECRET_KEY, strSecretKey, "OpenAPIKey");
 
-            if(iniKeyFile.KeyExists(INIFile.SHOULD_SAVE_KEY))
+            if (iniKeyFile.KeyExists(INIFile.SHOULD_SAVE_KEY))
             {
                 string strReadSecretKey = iniKeyFile.Read(INIFile.SHOULD_SAVE_KEY, SECTION_NAME);
                 if (strReadSecretKey.CompareTo(SHOULD_SAVE) != 0)
@@ -98,7 +98,7 @@ namespace upbit.View
             sbINIFilePath.AppendFormat("\\FuckedUpKey.ini");
             INIFile iniKeyFile = new INIFile(sbINIFilePath.ToString());
 
-            if(iniKeyFile.KeyExists(INIFile.ACCESS_KEY, SECTION_NAME))
+            if (iniKeyFile.KeyExists(INIFile.ACCESS_KEY, SECTION_NAME))
             {
                 iniKeyFile.DeleteKey(INIFile.ACCESS_KEY, SECTION_NAME);
             }
@@ -108,7 +108,7 @@ namespace upbit.View
                 iniKeyFile.DeleteKey(INIFile.SECRET_KEY, SECTION_NAME);
             }
 
-            if(iniKeyFile.KeyExists(INIFile.SHOULD_SAVE_KEY, SECTION_NAME))
+            if (iniKeyFile.KeyExists(INIFile.SHOULD_SAVE_KEY, SECTION_NAME))
             {
                 iniKeyFile.DeleteKey(INIFile.SHOULD_SAVE_KEY, SECTION_NAME);
                 iniKeyFile.Write(INIFile.SHOULD_SAVE_KEY, NO_NEED_TO_SAVE, SECTION_NAME);
@@ -166,7 +166,7 @@ namespace upbit.View
             string strAccessKey = textBox_AccessKey.Text;
             string strSecretKey = textBox_SecretKey.Text;
 
-            if(strAccessKey.Length < 15 || strSecretKey.Length < 15)
+            if (strAccessKey.Length < 15 || strSecretKey.Length < 15)
             {
                 return false;
             }
@@ -175,7 +175,7 @@ namespace upbit.View
             Task<List<Account>> taskAccountInfo = api.GetAccount();
             List<Account> accountInfo = await taskAccountInfo;
 
-            if(accountInfo!=null)
+            if (accountInfo != null)
             {
                 this.API = api;
                 return true;
@@ -195,7 +195,7 @@ namespace upbit.View
         //{
         //    return bLogInFlag;
         //}
-        
+
 
 
         private async void OnLogInButtonEvent(object sender, EventArgs e)
@@ -231,7 +231,7 @@ namespace upbit.View
         private void OnResize(object sender, EventArgs e)
         {
             //Control nextControl = this.GetNextControl(this, false);
-            
+
             //while (nextControl != null)
             //{
             //    nextControl = nextControl.GetNextControl(nextControl, false);
@@ -244,9 +244,9 @@ namespace upbit.View
             if (iniKeyFile.KeyExists(INIFile.SHOULD_SAVE_KEY, SECTION_NAME))
             {
                 string strReadKey = iniKeyFile.Read(INIFile.SHOULD_SAVE_KEY, SECTION_NAME);
-                if(strReadKey.CompareTo(SHOULD_SAVE) == 0)
+                if (strReadKey.CompareTo(SHOULD_SAVE) == 0)
                 {
-                    checkBox_SaveKey.CheckState = CheckState.Checked; 
+                    checkBox_SaveKey.CheckState = CheckState.Checked;
                 }
                 else
                 {
@@ -254,7 +254,7 @@ namespace upbit.View
                 }
             }
             iniKeyFile = null;
-         }
+        }
 
     }
 

@@ -11,7 +11,6 @@ namespace upbit.Model
         public string message;
         public string name;
 
-
         //public string Name { get => name; set => name = value; }
         //public string ErrorMessage { get => errorMessage; set => errorMessage = value; }
     }

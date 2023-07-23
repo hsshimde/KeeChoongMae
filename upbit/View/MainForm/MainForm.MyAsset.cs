@@ -64,7 +64,8 @@ namespace upbit.View
                     continue;
                 }
                 Coin coinInfo = DictCoinInfo[coinMarketCode];
-                CoinAccount myAssetCoinAccount = new CoinAccount(coinMarketCode, 0, acc.balance, coinInfo.CurPrice, acc.avg_buy_price);
+                //CoinAccount myAssetCoinAccount = new CoinAccount(coinMarketCode, 0, acc.balance, coinInfo.MarketTicker.trade_price, acc.avg_buy_price);
+                CoinAccount myAssetCoinAccount = new CoinAccount(coinMarketCode, 0, acc.balance, 0, acc.avg_buy_price);
                 myAssetCoinAccount.CoinNameEng = coinInfo.CoinNameEng;
                 myAssetCoinAccount.CoinNameKor = coinInfo.CoinNameKor;
                 bool bCoinAccountAlreadyExist = DictCoinAccount.ContainsKey(coinMarketCode);
@@ -121,7 +122,8 @@ namespace upbit.View
                 colBuilder.UnitCurrency = ColNameBuilder.EUnitCurrency.KRW;
                 int rowIdx = dgvMyAssetKRW.Rows.Add();
                 coinAccount.GridRowNumber = rowIdx;
-                dgvMyAssetKRW[colBuilder.BuildColName(), rowIdx].Value = coinMarketNameBuilder.ToString();
+                //dgvMyAssetKRW[colBuilder.BuildColName(), rowIdx].Value = coinMarketNameBuilder.ToString();
+                dgvMyAssetKRW[colBuilder.BuildColIdx(), rowIdx].Value = coinMarketNameBuilder.ToString();
             }
             else if (gridType == EMarketGridTabIdx.BTC)
             {

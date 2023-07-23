@@ -22,16 +22,16 @@ namespace upbit.UpbitAPI.Model
             public string name;
             public string[] order_types;
             public string[] order_sides;
-            public MarketBidAsk bid;
-            public MarketBidAsk ask;
+            public MarketBidAsk bid { get; set; }
+            public MarketBidAsk ask { get; set; }
             public double max_total;
             public string state;
 
             public class MarketBidAsk
             {
-                public string currency;
-                public string price_unit;
-                public double min_total;
+                public string currency { get; set; }
+                public string price_unit { get; set; }
+                public double min_total { get; set; }
             }
 
 

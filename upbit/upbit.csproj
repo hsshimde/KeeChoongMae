@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FontAwesome.Sharp, Version=6.3.0.0, Culture=neutral, PublicKeyToken=d16d1e4e568ec10f, processorArchitecture=MSIL">
+      <HintPath>..\packages\FontAwesome.Sharp.6.3.0\lib\net472\FontAwesome.Sharp.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.5.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
@@ -57,6 +60,8 @@
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="RestSharp, Version=106.15.0.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
       <HintPath>..\packages\RestSharp.106.15.0\lib\net452\RestSharp.dll</HintPath>
     </Reference>
@@ -92,6 +97,7 @@
     </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -101,23 +107,24 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ColumnNameBuilder\ColumnNameBuilder.cs" />
     <Compile Include="Controller\OrderTimer.cs" />
     <Compile Include="Controller\Running.MainTimer.cs" />
     <Compile Include="Controller\Running.cs" />
+    <Compile Include="Controller\TimeSpanCheck.cs" />
     <Compile Include="Enum\OrderState.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="Model\Error.cs" />
+    <Compile Include="Model\MyTotalAccountInfo.cs" />
+    <Compile Include="Model\OrderQueue.cs" />
+    <Compile Include="TradeMarketSetting\TradeMarketSetting.cs" />
+    <Compile Include="View\KeySaveForm\KeySaveForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Model\Error.cs" />
-    <Compile Include="Model\OrderQueue.cs" />
-    <Compile Include="View\MainForm\MainForm.AccountEvent.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
+    <Compile Include="View\KeySaveForm\KeySaveForm.Designer.cs">
+      <DependentUpon>KeySaveForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\Account.cs" />
     <Compile Include="Model\Asset.cs" />
@@ -143,17 +150,20 @@
     <Compile Include="Util\INIUtil.cs" />
     <Compile Include="UpbitAPI\NoParam.cs" />
     <Compile Include="UpbitAPI\Param.cs" />
-    <Compile Include="View\ConnectionNoWorkDialogue.cs">
+    <Compile Include="View\ConnectionNoWork\ConnectionNoWorkDialogue.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\ConnectionNoWorkDialogue.Designer.cs">
+    <Compile Include="View\ConnectionNoWork\ConnectionNoWorkDialogue.Designer.cs">
       <DependentUpon>ConnectionNoWorkDialogue.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\LogInForm.cs">
+    <Compile Include="View\LogInForm\LogInForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\LogInForm.Designer.cs">
+    <Compile Include="View\LogInForm\LogInForm.Designer.cs">
       <DependentUpon>LogInForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\MainForm\MainForm.AccountEvent.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="View\MainForm\MainForm.cs">
       <SubType>Form</SubType>
@@ -165,30 +175,33 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="View\MainForm\MainForm.SearchBox.cs">
-      <SubType>Code</SubType>
       <DependentUpon>MainForm.cs</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="View\MainForm\MainForm.SettingTransaction.cs">
-      <SubType>Code</SubType>
       <DependentUpon>MainForm.cs</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="View\MainForm\MainForm.ToolStripButton.cs">
-      <SubType>Code</SubType>
       <DependentUpon>MainForm.cs</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="View\MainForm\MainForm.UpdateGrid.cs">
-      <SubType>Code</SubType>
       <DependentUpon>MainForm.cs</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
-    <Compile Include="View\SelectCoinForm.cs">
+    <Compile Include="View\SelectAlgorithm\AlgorithmRegisterForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\SelectCoinForm.Designer.cs">
+    <Compile Include="View\SelectAlgorithm\AlgorithmRegisterForm.Designer.cs">
+      <DependentUpon>AlgorithmRegisterForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\SelectCoinForm\SelectCoinForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\SelectCoinForm\SelectCoinForm.Designer.cs">
       <DependentUpon>SelectCoinForm.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -197,18 +210,26 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="View\ConnectionNoWorkDialogue.resx">
+    <EmbeddedResource Include="View\ConnectionNoWork\ConnectionNoWorkDialogue.resx">
       <DependentUpon>ConnectionNoWorkDialogue.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\LogInForm.resx">
+    <EmbeddedResource Include="View\KeySaveForm\KeySaveForm.resx">
+      <DependentUpon>KeySaveForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\LogInForm\LogInForm.resx">
       <DependentUpon>LogInForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\MainForm\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\SelectCoinForm.resx">
+    <EmbeddedResource Include="View\SelectAlgorithm\AlgorithmRegisterForm.resx">
+      <DependentUpon>AlgorithmRegisterForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\SelectCoinForm\SelectCoinForm.resx">
       <DependentUpon>SelectCoinForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -225,6 +246,9 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\KeeChoongMae MainLogo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

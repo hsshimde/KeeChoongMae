@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -59,12 +58,10 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle28 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle29 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle30 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButton_START = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton_SelectCoin = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton_STOP = new System.Windows.Forms.ToolStripButton();
-            this.toolStripLabel_totalAsset = new System.Windows.Forms.ToolStripLabel();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle31 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tableLayoutPanelWholeForm = new System.Windows.Forms.TableLayoutPanel();
+            this.panel_TitleBar = new System.Windows.Forms.Panel();
+            this.pictureBox_keeChoongMae = new System.Windows.Forms.PictureBox();
             this.tabControl_Features = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanelMarketGrid = new System.Windows.Forms.TableLayoutPanel();
@@ -104,8 +101,9 @@
             this.MyAssetKRWOwnCount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.MyAssetKRWAvgBuyPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.MyAssetKRWCurNetValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.MyAssetKRWBuyVolume = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.MyAssetKRWGainLossValuation = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.MyAssetKRWCurProfitPercentage = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.MyAssetKRWBuyVolume = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.MyAssetKRWCompare24H = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPage8 = new System.Windows.Forms.TabPage();
             this.tabPage9 = new System.Windows.Forms.TabPage();
@@ -116,10 +114,22 @@
             this.button_MakeOrder = new System.Windows.Forms.Button();
             this.textBox_TransactionAmount = new System.Windows.Forms.TextBox();
             this.comboBox_selectMarket = new System.Windows.Forms.ComboBox();
-            this.tableLayoutPanelForSearchBox = new System.Windows.Forms.TableLayoutPanel();
-            this.textBox_SearchBox = new System.Windows.Forms.TextBox();
-            this.toolStrip1.SuspendLayout();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.label_OwnKRWNum = new System.Windows.Forms.Label();
+            this.label_OwnKRW = new System.Windows.Forms.Label();
+            this.label_TotalAssetValueWithKRWNum = new System.Windows.Forms.Label();
+            this.label_TotalAssetValueWithKRW = new System.Windows.Forms.Label();
+            this.label_ProfitRatioNum = new System.Windows.Forms.Label();
+            this.label_ProfitRatio = new System.Windows.Forms.Label();
+            this.label_TotalAssetValueNum = new System.Windows.Forms.Label();
+            this.label_TotalAssetValue = new System.Windows.Forms.Label();
+            this.label_ProfitLossValueNum = new System.Windows.Forms.Label();
+            this.label_ProfitLossValue = new System.Windows.Forms.Label();
+            this.label_BuyVolumeNum = new System.Windows.Forms.Label();
+            this.label_BuyVolume = new System.Windows.Forms.Label();
             this.tableLayoutPanelWholeForm.SuspendLayout();
+            this.panel_TitleBar.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_keeChoongMae)).BeginInit();
             this.tabControl_Features.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tableLayoutPanelMarketGrid.SuspendLayout();
@@ -140,73 +150,47 @@
             this.tabPage9.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvmyAssetUSDT)).BeginInit();
             this.tab.SuspendLayout();
-            this.tableLayoutPanelForSearchBox.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // toolStrip1
-            // 
-            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton_START,
-            this.toolStripButton_SelectCoin,
-            this.toolStripButton_STOP,
-            this.toolStripLabel_totalAsset});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(895, 39);
-            this.toolStrip1.TabIndex = 1;
-            this.toolStrip1.Text = "toolStrip1";
-            // 
-            // toolStripButton_START
-            // 
-            this.toolStripButton_START.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton_START.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton_START.Image")));
-            this.toolStripButton_START.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton_START.Name = "toolStripButton_START";
-            this.toolStripButton_START.Size = new System.Drawing.Size(23, 36);
-            this.toolStripButton_START.Text = "START";
-            // 
-            // toolStripButton_SelectCoin
-            // 
-            this.toolStripButton_SelectCoin.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton_SelectCoin.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton_SelectCoin.Image")));
-            this.toolStripButton_SelectCoin.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton_SelectCoin.Name = "toolStripButton_SelectCoin";
-            this.toolStripButton_SelectCoin.Size = new System.Drawing.Size(23, 36);
-            this.toolStripButton_SelectCoin.Text = "Select Coin";
-            // 
-            // toolStripButton_STOP
-            // 
-            this.toolStripButton_STOP.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton_STOP.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton_STOP.Image")));
-            this.toolStripButton_STOP.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton_STOP.Name = "toolStripButton_STOP";
-            this.toolStripButton_STOP.Size = new System.Drawing.Size(23, 36);
-            this.toolStripButton_STOP.Text = "STOP";
-            // 
-            // toolStripLabel_totalAsset
-            // 
-            this.toolStripLabel_totalAsset.Name = "toolStripLabel_totalAsset";
-            this.toolStripLabel_totalAsset.Size = new System.Drawing.Size(58, 36);
-            this.toolStripLabel_totalAsset.Text = "전체 자산";
             // 
             // tableLayoutPanelWholeForm
             // 
             this.tableLayoutPanelWholeForm.ColumnCount = 1;
             this.tableLayoutPanelWholeForm.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelWholeForm.Controls.Add(this.toolStrip1, 0, 0);
+            this.tableLayoutPanelWholeForm.Controls.Add(this.panel_TitleBar, 0, 0);
             this.tableLayoutPanelWholeForm.Controls.Add(this.tabControl_Features, 0, 2);
-            this.tableLayoutPanelWholeForm.Controls.Add(this.tableLayoutPanelForSearchBox, 0, 1);
+            this.tableLayoutPanelWholeForm.Controls.Add(this.tableLayoutPanel1, 0, 1);
             this.tableLayoutPanelWholeForm.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanelWholeForm.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanelWholeForm.Name = "tableLayoutPanelWholeForm";
             this.tableLayoutPanelWholeForm.RowCount = 3;
-            this.tableLayoutPanelWholeForm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5.923953F));
-            this.tableLayoutPanelWholeForm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 6.553556F));
-            this.tableLayoutPanelWholeForm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 87.52249F));
-            this.tableLayoutPanelWholeForm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanelWholeForm.Size = new System.Drawing.Size(895, 661);
+            this.tableLayoutPanelWholeForm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.33645F));
+            this.tableLayoutPanelWholeForm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.73333F));
+            this.tableLayoutPanelWholeForm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 72F));
+            this.tableLayoutPanelWholeForm.Size = new System.Drawing.Size(1337, 750);
             this.tableLayoutPanelWholeForm.TabIndex = 1;
+            // 
+            // panel_TitleBar
+            // 
+            this.panel_TitleBar.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panel_TitleBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(25)))), ((int)(((byte)(62)))));
+            this.panel_TitleBar.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.panel_TitleBar.Controls.Add(this.pictureBox_keeChoongMae);
+            this.panel_TitleBar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel_TitleBar.Location = new System.Drawing.Point(3, 3);
+            this.panel_TitleBar.Name = "panel_TitleBar";
+            this.panel_TitleBar.Size = new System.Drawing.Size(1331, 116);
+            this.panel_TitleBar.TabIndex = 0;
+            // 
+            // pictureBox_keeChoongMae
+            // 
+            this.pictureBox_keeChoongMae.Image = global::upbit.Properties.Resources.KeeChoongMae_MainLogo;
+            this.pictureBox_keeChoongMae.Location = new System.Drawing.Point(436, 30);
+            this.pictureBox_keeChoongMae.Name = "pictureBox_keeChoongMae";
+            this.pictureBox_keeChoongMae.Size = new System.Drawing.Size(413, 50);
+            this.pictureBox_keeChoongMae.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.pictureBox_keeChoongMae.TabIndex = 2;
+            this.pictureBox_keeChoongMae.TabStop = false;
             // 
             // tabControl_Features
             // 
@@ -215,11 +199,11 @@
             this.tabControl_Features.Controls.Add(this.tab);
             this.tabControl_Features.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl_Features.Font = new System.Drawing.Font("Gulim", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.tabControl_Features.Location = new System.Drawing.Point(3, 85);
+            this.tabControl_Features.Location = new System.Drawing.Point(3, 212);
             this.tabControl_Features.Multiline = true;
             this.tabControl_Features.Name = "tabControl_Features";
             this.tabControl_Features.SelectedIndex = 0;
-            this.tabControl_Features.Size = new System.Drawing.Size(889, 573);
+            this.tabControl_Features.Size = new System.Drawing.Size(1331, 535);
             this.tabControl_Features.TabIndex = 0;
             // 
             // tabPage1
@@ -229,7 +213,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 29);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(881, 540);
+            this.tabPage1.Size = new System.Drawing.Size(1323, 502);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "거래소";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -246,7 +230,7 @@
             this.tableLayoutPanelMarketGrid.RowCount = 2;
             this.tableLayoutPanelMarketGrid.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanelMarketGrid.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelMarketGrid.Size = new System.Drawing.Size(875, 534);
+            this.tableLayoutPanelMarketGrid.Size = new System.Drawing.Size(1317, 496);
             this.tableLayoutPanelMarketGrid.TabIndex = 1;
             // 
             // tableLayoutPanelMarketSearchBox
@@ -262,21 +246,22 @@
             this.tableLayoutPanelMarketSearchBox.Name = "tableLayoutPanelMarketSearchBox";
             this.tableLayoutPanelMarketSearchBox.RowCount = 1;
             this.tableLayoutPanelMarketSearchBox.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelMarketSearchBox.Size = new System.Drawing.Size(869, 34);
+            this.tableLayoutPanelMarketSearchBox.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
+            this.tableLayoutPanelMarketSearchBox.Size = new System.Drawing.Size(1311, 34);
             this.tableLayoutPanelMarketSearchBox.TabIndex = 1;
             // 
             // button_marketSearchBox
             // 
             this.button_marketSearchBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.button_marketSearchBox.Font = new System.Drawing.Font("Gulim", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.button_marketSearchBox.Location = new System.Drawing.Point(350, 3);
+            this.button_marketSearchBox.Location = new System.Drawing.Point(527, 3);
             this.button_marketSearchBox.Name = "button_marketSearchBox";
-            this.button_marketSearchBox.Size = new System.Drawing.Size(80, 28);
+            this.button_marketSearchBox.Size = new System.Drawing.Size(125, 28);
             this.button_marketSearchBox.TabIndex = 1;
             this.button_marketSearchBox.Text = "검색";
             this.button_marketSearchBox.UseVisualStyleBackColor = true;
             this.button_marketSearchBox.Click += new System.EventHandler(this.OnBnClickedMakeOrder);
-            this.button_marketSearchBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.button_marketSearchBox_MouseDown);
+            this.button_marketSearchBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Button_marketSearchBox_MouseDown);
             // 
             // textBoxMarketSearchBox
             // 
@@ -301,7 +286,7 @@
             this.tabControl_market.Multiline = true;
             this.tabControl_market.Name = "tabControl_market";
             this.tabControl_market.SelectedIndex = 0;
-            this.tabControl_market.Size = new System.Drawing.Size(869, 488);
+            this.tabControl_market.Size = new System.Drawing.Size(1311, 450);
             this.tabControl_market.TabIndex = 0;
             // 
             // tabPage_marketKRW
@@ -310,7 +295,7 @@
             this.tabPage_marketKRW.Location = new System.Drawing.Point(4, 31);
             this.tabPage_marketKRW.Name = "tabPage_marketKRW";
             this.tabPage_marketKRW.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage_marketKRW.Size = new System.Drawing.Size(861, 453);
+            this.tabPage_marketKRW.Size = new System.Drawing.Size(1303, 415);
             this.tabPage_marketKRW.TabIndex = 0;
             this.tabPage_marketKRW.Text = "KRW";
             this.tabPage_marketKRW.UseVisualStyleBackColor = true;
@@ -343,7 +328,7 @@
             this.dgvMarketKRW.Name = "dgvMarketKRW";
             this.dgvMarketKRW.RowHeadersVisible = false;
             this.dgvMarketKRW.RowTemplate.Height = 23;
-            this.dgvMarketKRW.Size = new System.Drawing.Size(855, 447);
+            this.dgvMarketKRW.Size = new System.Drawing.Size(1297, 409);
             this.dgvMarketKRW.TabIndex = 0;
             this.dgvMarketKRW.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.OnMarketDataGridViewSortCompare);
             this.dgvMarketKRW.Sorted += new System.EventHandler(this.OnDataGridViewSorted);
@@ -399,7 +384,7 @@
             this.tabPage_marketBTC.Location = new System.Drawing.Point(4, 31);
             this.tabPage_marketBTC.Name = "tabPage_marketBTC";
             this.tabPage_marketBTC.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage_marketBTC.Size = new System.Drawing.Size(861, 453);
+            this.tabPage_marketBTC.Size = new System.Drawing.Size(1303, 415);
             this.tabPage_marketBTC.TabIndex = 1;
             this.tabPage_marketBTC.Text = "BTC";
             this.tabPage_marketBTC.UseVisualStyleBackColor = true;
@@ -432,7 +417,7 @@
             this.dgvMarketBTC.RowHeadersVisible = false;
             this.dgvMarketBTC.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dgvMarketBTC.RowTemplate.Height = 23;
-            this.dgvMarketBTC.Size = new System.Drawing.Size(855, 447);
+            this.dgvMarketBTC.Size = new System.Drawing.Size(1297, 409);
             this.dgvMarketBTC.TabIndex = 1;
             this.dgvMarketBTC.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.OnMarketDataGridViewSortCompare);
             this.dgvMarketBTC.Sorted += new System.EventHandler(this.OnDataGridViewSorted);
@@ -484,7 +469,7 @@
             this.tabPage_marketUSDT.Location = new System.Drawing.Point(4, 31);
             this.tabPage_marketUSDT.Name = "tabPage_marketUSDT";
             this.tabPage_marketUSDT.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage_marketUSDT.Size = new System.Drawing.Size(861, 453);
+            this.tabPage_marketUSDT.Size = new System.Drawing.Size(1303, 415);
             this.tabPage_marketUSDT.TabIndex = 2;
             this.tabPage_marketUSDT.Text = "USDT";
             this.tabPage_marketUSDT.UseVisualStyleBackColor = true;
@@ -514,7 +499,7 @@
             this.dgvMarketUSDT.Name = "dgvMarketUSDT";
             this.dgvMarketUSDT.RowHeadersVisible = false;
             this.dgvMarketUSDT.RowTemplate.Height = 23;
-            this.dgvMarketUSDT.Size = new System.Drawing.Size(855, 447);
+            this.dgvMarketUSDT.Size = new System.Drawing.Size(1297, 409);
             this.dgvMarketUSDT.TabIndex = 2;
             this.dgvMarketUSDT.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.OnMarketDataGridViewSortCompare);
             this.dgvMarketUSDT.Sorted += new System.EventHandler(this.OnDataGridViewSorted);
@@ -566,7 +551,7 @@
             this.tabPage_marketInterest.Location = new System.Drawing.Point(4, 31);
             this.tabPage_marketInterest.Name = "tabPage_marketInterest";
             this.tabPage_marketInterest.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage_marketInterest.Size = new System.Drawing.Size(861, 453);
+            this.tabPage_marketInterest.Size = new System.Drawing.Size(1303, 415);
             this.tabPage_marketInterest.TabIndex = 3;
             this.tabPage_marketInterest.Text = "관심 종목";
             this.tabPage_marketInterest.UseVisualStyleBackColor = true;
@@ -598,7 +583,7 @@
             this.dgvMarketInterestCoin.Name = "dgvMarketInterestCoin";
             this.dgvMarketInterestCoin.RowHeadersVisible = false;
             this.dgvMarketInterestCoin.RowTemplate.Height = 23;
-            this.dgvMarketInterestCoin.Size = new System.Drawing.Size(855, 447);
+            this.dgvMarketInterestCoin.Size = new System.Drawing.Size(1297, 409);
             this.dgvMarketInterestCoin.TabIndex = 2;
             this.dgvMarketInterestCoin.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.OnMarketDataGridViewSortCompare);
             this.dgvMarketInterestCoin.Sorted += new System.EventHandler(this.OnDataGridViewSorted);
@@ -653,7 +638,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 29);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(881, 540);
+            this.tabPage2.Size = new System.Drawing.Size(1323, 502);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "투자내역";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -669,7 +654,7 @@
             this.tabControl_myAsset.Location = new System.Drawing.Point(3, 3);
             this.tabControl_myAsset.Name = "tabControl_myAsset";
             this.tabControl_myAsset.SelectedIndex = 0;
-            this.tabControl_myAsset.Size = new System.Drawing.Size(875, 534);
+            this.tabControl_myAsset.Size = new System.Drawing.Size(1317, 496);
             this.tabControl_myAsset.TabIndex = 0;
             // 
             // tabPage7
@@ -678,7 +663,7 @@
             this.tabPage7.Location = new System.Drawing.Point(4, 31);
             this.tabPage7.Name = "tabPage7";
             this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage7.Size = new System.Drawing.Size(867, 499);
+            this.tabPage7.Size = new System.Drawing.Size(1309, 461);
             this.tabPage7.TabIndex = 0;
             this.tabPage7.Text = "KRW";
             this.tabPage7.UseVisualStyleBackColor = true;
@@ -704,8 +689,9 @@
             this.MyAssetKRWOwnCount,
             this.MyAssetKRWAvgBuyPrice,
             this.MyAssetKRWCurNetValue,
-            this.MyAssetKRWBuyVolume,
+            this.MyAssetKRWGainLossValuation,
             this.MyAssetKRWCurProfitPercentage,
+            this.MyAssetKRWBuyVolume,
             this.MyAssetKRWCompare24H});
             this.dgvMyAssetKRW.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvMyAssetKRW.Location = new System.Drawing.Point(3, 3);
@@ -713,18 +699,19 @@
             this.dgvMyAssetKRW.RowHeadersVisible = false;
             this.dgvMyAssetKRW.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dgvMyAssetKRW.RowTemplate.Height = 23;
-            this.dgvMyAssetKRW.Size = new System.Drawing.Size(861, 493);
+            this.dgvMyAssetKRW.Size = new System.Drawing.Size(1303, 455);
             this.dgvMyAssetKRW.TabIndex = 0;
             // 
             // MyAssetKRWMarketCode
             // 
-            this.MyAssetKRWMarketCode.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.MyAssetKRWMarketCode.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             dataGridViewCellStyle22.Font = new System.Drawing.Font("Gulim", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.MyAssetKRWMarketCode.DefaultCellStyle = dataGridViewCellStyle22;
             this.MyAssetKRWMarketCode.HeaderText = "종목";
             this.MyAssetKRWMarketCode.Name = "MyAssetKRWMarketCode";
             this.MyAssetKRWMarketCode.ReadOnly = true;
             this.MyAssetKRWMarketCode.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.MyAssetKRWMarketCode.Width = 166;
             // 
             // MyAssetKRWOwnCount
             // 
@@ -749,39 +736,50 @@
             // 
             // MyAssetKRWCurNetValue
             // 
-            this.MyAssetKRWCurNetValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.MyAssetKRWCurNetValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             dataGridViewCellStyle25.Font = new System.Drawing.Font("Gulim", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.MyAssetKRWCurNetValue.DefaultCellStyle = dataGridViewCellStyle25;
             this.MyAssetKRWCurNetValue.HeaderText = "평가금액";
             this.MyAssetKRWCurNetValue.Name = "MyAssetKRWCurNetValue";
             this.MyAssetKRWCurNetValue.ReadOnly = true;
             this.MyAssetKRWCurNetValue.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.MyAssetKRWCurNetValue.Width = 166;
             // 
-            // MyAssetKRWBuyVolume
+            // MyAssetKRWGainLossValuation
             // 
-            this.MyAssetKRWBuyVolume.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             dataGridViewCellStyle26.Font = new System.Drawing.Font("Gulim", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.MyAssetKRWBuyVolume.DefaultCellStyle = dataGridViewCellStyle26;
-            this.MyAssetKRWBuyVolume.HeaderText = "매수금액";
-            this.MyAssetKRWBuyVolume.Name = "MyAssetKRWBuyVolume";
-            this.MyAssetKRWBuyVolume.ReadOnly = true;
-            this.MyAssetKRWBuyVolume.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.MyAssetKRWGainLossValuation.DefaultCellStyle = dataGridViewCellStyle26;
+            this.MyAssetKRWGainLossValuation.HeaderText = "평가손익";
+            this.MyAssetKRWGainLossValuation.Name = "MyAssetKRWGainLossValuation";
+            this.MyAssetKRWGainLossValuation.ReadOnly = true;
+            this.MyAssetKRWGainLossValuation.Width = 123;
             // 
             // MyAssetKRWCurProfitPercentage
             // 
             dataGridViewCellStyle27.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle27.Font = new System.Drawing.Font("Gulim", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.MyAssetKRWCurProfitPercentage.DefaultCellStyle = dataGridViewCellStyle27;
-            this.MyAssetKRWCurProfitPercentage.HeaderText = "수익률";
+            this.MyAssetKRWCurProfitPercentage.HeaderText = "평가손익률";
             this.MyAssetKRWCurProfitPercentage.Name = "MyAssetKRWCurProfitPercentage";
             this.MyAssetKRWCurProfitPercentage.ReadOnly = true;
             this.MyAssetKRWCurProfitPercentage.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.MyAssetKRWCurProfitPercentage.Width = 101;
+            this.MyAssetKRWCurProfitPercentage.Width = 145;
+            // 
+            // MyAssetKRWBuyVolume
+            // 
+            this.MyAssetKRWBuyVolume.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            dataGridViewCellStyle28.Font = new System.Drawing.Font("Gulim", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.MyAssetKRWBuyVolume.DefaultCellStyle = dataGridViewCellStyle28;
+            this.MyAssetKRWBuyVolume.HeaderText = "매수금액";
+            this.MyAssetKRWBuyVolume.Name = "MyAssetKRWBuyVolume";
+            this.MyAssetKRWBuyVolume.ReadOnly = true;
+            this.MyAssetKRWBuyVolume.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.MyAssetKRWBuyVolume.Width = 166;
             // 
             // MyAssetKRWCompare24H
             // 
-            dataGridViewCellStyle28.Font = new System.Drawing.Font("Gulim", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.MyAssetKRWCompare24H.DefaultCellStyle = dataGridViewCellStyle28;
+            dataGridViewCellStyle29.Font = new System.Drawing.Font("Gulim", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.MyAssetKRWCompare24H.DefaultCellStyle = dataGridViewCellStyle29;
             this.MyAssetKRWCompare24H.HeaderText = "전일대비";
             this.MyAssetKRWCompare24H.Name = "MyAssetKRWCompare24H";
             this.MyAssetKRWCompare24H.ReadOnly = true;
@@ -793,7 +791,7 @@
             this.tabPage8.Location = new System.Drawing.Point(4, 31);
             this.tabPage8.Name = "tabPage8";
             this.tabPage8.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage8.Size = new System.Drawing.Size(867, 499);
+            this.tabPage8.Size = new System.Drawing.Size(1309, 429);
             this.tabPage8.TabIndex = 1;
             this.tabPage8.Text = "BTC";
             this.tabPage8.UseVisualStyleBackColor = true;
@@ -804,7 +802,7 @@
             this.tabPage9.Location = new System.Drawing.Point(4, 31);
             this.tabPage9.Name = "tabPage9";
             this.tabPage9.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage9.Size = new System.Drawing.Size(867, 499);
+            this.tabPage9.Size = new System.Drawing.Size(1309, 429);
             this.tabPage9.TabIndex = 2;
             this.tabPage9.Text = "USDT";
             this.tabPage9.UseVisualStyleBackColor = true;
@@ -813,14 +811,14 @@
             // 
             this.dgvmyAssetUSDT.AllowUserToAddRows = false;
             this.dgvmyAssetUSDT.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle29.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle29.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle29.Font = new System.Drawing.Font("Gulim", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            dataGridViewCellStyle29.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle29.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle29.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle29.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvmyAssetUSDT.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle29;
+            dataGridViewCellStyle30.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle30.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle30.Font = new System.Drawing.Font("Gulim", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            dataGridViewCellStyle30.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle30.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle30.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle30.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvmyAssetUSDT.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle30;
             this.dgvmyAssetUSDT.ColumnHeadersHeight = 29;
             this.dgvmyAssetUSDT.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dgvmyAssetUSDT.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -830,13 +828,13 @@
             this.dgvmyAssetUSDT.Name = "dgvmyAssetUSDT";
             this.dgvmyAssetUSDT.RowHeadersVisible = false;
             this.dgvmyAssetUSDT.RowTemplate.Height = 23;
-            this.dgvmyAssetUSDT.Size = new System.Drawing.Size(861, 493);
+            this.dgvmyAssetUSDT.Size = new System.Drawing.Size(1303, 423);
             this.dgvmyAssetUSDT.TabIndex = 0;
             // 
             // MyAssetUSDTMarketCode
             // 
-            dataGridViewCellStyle30.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.MyAssetUSDTMarketCode.DefaultCellStyle = dataGridViewCellStyle30;
+            dataGridViewCellStyle31.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.MyAssetUSDTMarketCode.DefaultCellStyle = dataGridViewCellStyle31;
             this.MyAssetUSDTMarketCode.HeaderText = "종목";
             this.MyAssetUSDTMarketCode.Name = "MyAssetUSDTMarketCode";
             // 
@@ -849,29 +847,33 @@
             this.tab.Location = new System.Drawing.Point(4, 29);
             this.tab.Name = "tab";
             this.tab.Padding = new System.Windows.Forms.Padding(3);
-            this.tab.Size = new System.Drawing.Size(881, 540);
+            this.tab.Size = new System.Drawing.Size(1323, 502);
             this.tab.TabIndex = 2;
             this.tab.Text = "매도/매수";
             this.tab.UseVisualStyleBackColor = true;
             // 
             // button_curTransChange
             // 
+            this.button_curTransChange.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(25)))), ((int)(((byte)(62)))));
+            this.button_curTransChange.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.button_curTransChange.Location = new System.Drawing.Point(75, 14);
             this.button_curTransChange.Name = "button_curTransChange";
             this.button_curTransChange.Size = new System.Drawing.Size(88, 35);
             this.button_curTransChange.TabIndex = 3;
             this.button_curTransChange.Text = "매수";
-            this.button_curTransChange.UseVisualStyleBackColor = true;
+            this.button_curTransChange.UseVisualStyleBackColor = false;
             this.button_curTransChange.Click += new System.EventHandler(this.OnBnClickedSettingTransactionSellOrBuy);
             // 
             // button_MakeOrder
             // 
+            this.button_MakeOrder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(25)))), ((int)(((byte)(62)))));
+            this.button_MakeOrder.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.button_MakeOrder.Location = new System.Drawing.Point(655, 51);
             this.button_MakeOrder.Name = "button_MakeOrder";
-            this.button_MakeOrder.Size = new System.Drawing.Size(75, 29);
+            this.button_MakeOrder.Size = new System.Drawing.Size(91, 29);
             this.button_MakeOrder.TabIndex = 2;
             this.button_MakeOrder.Text = "주문";
-            this.button_MakeOrder.UseVisualStyleBackColor = true;
+            this.button_MakeOrder.UseVisualStyleBackColor = false;
             this.button_MakeOrder.Click += new System.EventHandler(this.OnBnClickedMakeOrder);
             // 
             // textBox_TransactionAmount
@@ -890,47 +892,194 @@
             this.comboBox_selectMarket.TabIndex = 0;
             this.comboBox_selectMarket.Text = "선택";
             // 
-            // tableLayoutPanelForSearchBox
+            // tableLayoutPanel1
             // 
-            this.tableLayoutPanelForSearchBox.ColumnCount = 1;
-            this.tableLayoutPanelForSearchBox.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelForSearchBox.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanelForSearchBox.Controls.Add(this.textBox_SearchBox, 0, 0);
-            this.tableLayoutPanelForSearchBox.Dock = System.Windows.Forms.DockStyle.Left;
-            this.tableLayoutPanelForSearchBox.Location = new System.Drawing.Point(3, 42);
-            this.tableLayoutPanelForSearchBox.Name = "tableLayoutPanelForSearchBox";
-            this.tableLayoutPanelForSearchBox.RowCount = 1;
-            this.tableLayoutPanelForSearchBox.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelForSearchBox.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
-            this.tableLayoutPanelForSearchBox.Size = new System.Drawing.Size(415, 37);
-            this.tableLayoutPanelForSearchBox.TabIndex = 2;
+            this.tableLayoutPanel1.ColumnCount = 4;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.Controls.Add(this.label_OwnKRWNum, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.label_OwnKRW, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.label_TotalAssetValueWithKRWNum, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.label_TotalAssetValueWithKRW, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.label_ProfitRatioNum, 3, 1);
+            this.tableLayoutPanel1.Controls.Add(this.label_ProfitRatio, 2, 1);
+            this.tableLayoutPanel1.Controls.Add(this.label_TotalAssetValueNum, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.label_TotalAssetValue, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.label_ProfitLossValueNum, 3, 0);
+            this.tableLayoutPanel1.Controls.Add(this.label_ProfitLossValue, 2, 0);
+            this.tableLayoutPanel1.Controls.Add(this.label_BuyVolumeNum, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.label_BuyVolume, 0, 0);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 125);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 3;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1331, 81);
+            this.tableLayoutPanel1.TabIndex = 2;
             // 
-            // textBox_SearchBox
+            // label_OwnKRWNum
             // 
-            this.textBox_SearchBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox_SearchBox.Location = new System.Drawing.Point(3, 3);
-            this.textBox_SearchBox.Name = "textBox_SearchBox";
-            this.textBox_SearchBox.Size = new System.Drawing.Size(409, 25);
-            this.textBox_SearchBox.TabIndex = 3;
-            this.textBox_SearchBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.textBox_SearchBox.TextChanged += new System.EventHandler(this.textBox_SearchBox_TextChanged);
+            this.label_OwnKRWNum.AutoSize = true;
+            this.label_OwnKRWNum.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label_OwnKRWNum.Font = new System.Drawing.Font("Gulim", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label_OwnKRWNum.Location = new System.Drawing.Point(335, 54);
+            this.label_OwnKRWNum.Name = "label_OwnKRWNum";
+            this.label_OwnKRWNum.Size = new System.Drawing.Size(326, 27);
+            this.label_OwnKRWNum.TabIndex = 11;
+            this.label_OwnKRWNum.Text = "-";
+            this.label_OwnKRWNum.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label_OwnKRW
+            // 
+            this.label_OwnKRW.AutoSize = true;
+            this.label_OwnKRW.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label_OwnKRW.Font = new System.Drawing.Font("Gulim", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label_OwnKRW.Location = new System.Drawing.Point(3, 54);
+            this.label_OwnKRW.Name = "label_OwnKRW";
+            this.label_OwnKRW.Size = new System.Drawing.Size(326, 27);
+            this.label_OwnKRW.TabIndex = 10;
+            this.label_OwnKRW.Text = "보유 KRW";
+            this.label_OwnKRW.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label_TotalAssetValueWithKRWNum
+            // 
+            this.label_TotalAssetValueWithKRWNum.AutoSize = true;
+            this.label_TotalAssetValueWithKRWNum.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label_TotalAssetValueWithKRWNum.Font = new System.Drawing.Font("Gulim", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label_TotalAssetValueWithKRWNum.Location = new System.Drawing.Point(999, 54);
+            this.label_TotalAssetValueWithKRWNum.Name = "label_TotalAssetValueWithKRWNum";
+            this.label_TotalAssetValueWithKRWNum.Size = new System.Drawing.Size(329, 27);
+            this.label_TotalAssetValueWithKRWNum.TabIndex = 9;
+            this.label_TotalAssetValueWithKRWNum.Text = "-";
+            this.label_TotalAssetValueWithKRWNum.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label_TotalAssetValueWithKRW
+            // 
+            this.label_TotalAssetValueWithKRW.AutoSize = true;
+            this.label_TotalAssetValueWithKRW.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label_TotalAssetValueWithKRW.Font = new System.Drawing.Font("Gulim", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label_TotalAssetValueWithKRW.Location = new System.Drawing.Point(667, 54);
+            this.label_TotalAssetValueWithKRW.Name = "label_TotalAssetValueWithKRW";
+            this.label_TotalAssetValueWithKRW.Size = new System.Drawing.Size(326, 27);
+            this.label_TotalAssetValueWithKRW.TabIndex = 8;
+            this.label_TotalAssetValueWithKRW.Text = "총 보유자산";
+            this.label_TotalAssetValueWithKRW.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label_ProfitRatioNum
+            // 
+            this.label_ProfitRatioNum.AutoSize = true;
+            this.label_ProfitRatioNum.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label_ProfitRatioNum.Font = new System.Drawing.Font("Gulim", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label_ProfitRatioNum.Location = new System.Drawing.Point(999, 27);
+            this.label_ProfitRatioNum.Name = "label_ProfitRatioNum";
+            this.label_ProfitRatioNum.Size = new System.Drawing.Size(329, 27);
+            this.label_ProfitRatioNum.TabIndex = 7;
+            this.label_ProfitRatioNum.Text = "-";
+            this.label_ProfitRatioNum.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label_ProfitRatio
+            // 
+            this.label_ProfitRatio.AutoSize = true;
+            this.label_ProfitRatio.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label_ProfitRatio.Font = new System.Drawing.Font("Gulim", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label_ProfitRatio.Location = new System.Drawing.Point(667, 27);
+            this.label_ProfitRatio.Name = "label_ProfitRatio";
+            this.label_ProfitRatio.Size = new System.Drawing.Size(326, 27);
+            this.label_ProfitRatio.TabIndex = 6;
+            this.label_ProfitRatio.Text = "수익률";
+            this.label_ProfitRatio.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label_TotalAssetValueNum
+            // 
+            this.label_TotalAssetValueNum.AutoSize = true;
+            this.label_TotalAssetValueNum.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label_TotalAssetValueNum.Font = new System.Drawing.Font("Gulim", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label_TotalAssetValueNum.Location = new System.Drawing.Point(335, 27);
+            this.label_TotalAssetValueNum.Name = "label_TotalAssetValueNum";
+            this.label_TotalAssetValueNum.Size = new System.Drawing.Size(326, 27);
+            this.label_TotalAssetValueNum.TabIndex = 5;
+            this.label_TotalAssetValueNum.Text = "-";
+            this.label_TotalAssetValueNum.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label_TotalAssetValue
+            // 
+            this.label_TotalAssetValue.AutoSize = true;
+            this.label_TotalAssetValue.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label_TotalAssetValue.Font = new System.Drawing.Font("Gulim", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label_TotalAssetValue.Location = new System.Drawing.Point(3, 27);
+            this.label_TotalAssetValue.Name = "label_TotalAssetValue";
+            this.label_TotalAssetValue.Size = new System.Drawing.Size(326, 27);
+            this.label_TotalAssetValue.TabIndex = 4;
+            this.label_TotalAssetValue.Text = "총평가";
+            this.label_TotalAssetValue.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label_ProfitLossValueNum
+            // 
+            this.label_ProfitLossValueNum.AutoSize = true;
+            this.label_ProfitLossValueNum.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label_ProfitLossValueNum.Font = new System.Drawing.Font("Gulim", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label_ProfitLossValueNum.Location = new System.Drawing.Point(999, 0);
+            this.label_ProfitLossValueNum.Name = "label_ProfitLossValueNum";
+            this.label_ProfitLossValueNum.Size = new System.Drawing.Size(329, 27);
+            this.label_ProfitLossValueNum.TabIndex = 3;
+            this.label_ProfitLossValueNum.Text = "-";
+            this.label_ProfitLossValueNum.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label_ProfitLossValue
+            // 
+            this.label_ProfitLossValue.AutoSize = true;
+            this.label_ProfitLossValue.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label_ProfitLossValue.Font = new System.Drawing.Font("Gulim", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label_ProfitLossValue.Location = new System.Drawing.Point(667, 0);
+            this.label_ProfitLossValue.Name = "label_ProfitLossValue";
+            this.label_ProfitLossValue.Size = new System.Drawing.Size(326, 27);
+            this.label_ProfitLossValue.TabIndex = 2;
+            this.label_ProfitLossValue.Text = "평가손익";
+            this.label_ProfitLossValue.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label_BuyVolumeNum
+            // 
+            this.label_BuyVolumeNum.AutoSize = true;
+            this.label_BuyVolumeNum.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label_BuyVolumeNum.Font = new System.Drawing.Font("Gulim", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label_BuyVolumeNum.Location = new System.Drawing.Point(335, 0);
+            this.label_BuyVolumeNum.Name = "label_BuyVolumeNum";
+            this.label_BuyVolumeNum.Size = new System.Drawing.Size(326, 27);
+            this.label_BuyVolumeNum.TabIndex = 1;
+            this.label_BuyVolumeNum.Text = "-";
+            this.label_BuyVolumeNum.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label_BuyVolume
+            // 
+            this.label_BuyVolume.AutoSize = true;
+            this.label_BuyVolume.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label_BuyVolume.Font = new System.Drawing.Font("Gulim", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label_BuyVolume.Location = new System.Drawing.Point(3, 0);
+            this.label_BuyVolume.Name = "label_BuyVolume";
+            this.label_BuyVolume.Size = new System.Drawing.Size(326, 27);
+            this.label_BuyVolume.TabIndex = 0;
+            this.label_BuyVolume.Text = "총매수";
+            this.label_BuyVolume.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(895, 661);
+            this.ClientSize = new System.Drawing.Size(1337, 750);
             this.Controls.Add(this.tableLayoutPanelWholeForm);
             this.Font = new System.Drawing.Font("Malgun Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "MainForm";
             this.Text = "기충매";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosingEvent);
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
             this.tableLayoutPanelWholeForm.ResumeLayout(false);
-            this.tableLayoutPanelWholeForm.PerformLayout();
+            this.panel_TitleBar.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_keeChoongMae)).EndInit();
             this.tabControl_Features.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tableLayoutPanelMarketGrid.ResumeLayout(false);
@@ -953,22 +1102,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvmyAssetUSDT)).EndInit();
             this.tab.ResumeLayout(false);
             this.tab.PerformLayout();
-            this.tableLayoutPanelForSearchBox.ResumeLayout(false);
-            this.tableLayoutPanelForSearchBox.PerformLayout();
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripButton toolStripButton_START;
-        private System.Windows.Forms.ToolStripButton toolStripButton_SelectCoin;
-        private System.Windows.Forms.ToolStripButton toolStripButton_STOP;
-        private System.Windows.Forms.ToolStripLabel toolStripLabel_totalAsset;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelWholeForm;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelForSearchBox;
-        private System.Windows.Forms.TextBox textBox_SearchBox;
         private System.Windows.Forms.TabControl tabControl_Features;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
@@ -1013,12 +1154,28 @@
         private System.Windows.Forms.TextBox textBox_TransactionAmount;
         private System.Windows.Forms.Button button_MakeOrder;
         private System.Windows.Forms.Button button_curTransChange;
+        private System.Windows.Forms.Panel panel_TitleBar;
+        private System.Windows.Forms.PictureBox pictureBox_keeChoongMae;
         private System.Windows.Forms.DataGridViewTextBoxColumn MyAssetKRWMarketCode;
         private System.Windows.Forms.DataGridViewTextBoxColumn MyAssetKRWOwnCount;
         private System.Windows.Forms.DataGridViewTextBoxColumn MyAssetKRWAvgBuyPrice;
         private System.Windows.Forms.DataGridViewTextBoxColumn MyAssetKRWCurNetValue;
-        private System.Windows.Forms.DataGridViewTextBoxColumn MyAssetKRWBuyVolume;
+        private System.Windows.Forms.DataGridViewTextBoxColumn MyAssetKRWGainLossValuation;
         private System.Windows.Forms.DataGridViewTextBoxColumn MyAssetKRWCurProfitPercentage;
+        private System.Windows.Forms.DataGridViewTextBoxColumn MyAssetKRWBuyVolume;
         private System.Windows.Forms.DataGridViewTextBoxColumn MyAssetKRWCompare24H;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.Label label_BuyVolume;
+        private System.Windows.Forms.Label label_BuyVolumeNum;
+        private System.Windows.Forms.Label label_ProfitLossValue;
+        private System.Windows.Forms.Label label_ProfitLossValueNum;
+        private System.Windows.Forms.Label label_ProfitRatio;
+        private System.Windows.Forms.Label label_TotalAssetValueNum;
+        private System.Windows.Forms.Label label_TotalAssetValue;
+        private System.Windows.Forms.Label label_ProfitRatioNum;
+        private System.Windows.Forms.Label label_OwnKRW;
+        private System.Windows.Forms.Label label_TotalAssetValueWithKRW;
+        private System.Windows.Forms.Label label_TotalAssetValueWithKRWNum;
+        private System.Windows.Forms.Label label_OwnKRWNum;
     }
 }

@@ -7,6 +7,7 @@ using upbit.Model;
 using upbit.UpbitAPI.Model;
 using upbit.Enum;
 using static upbit.Controller.Running;
+using static upbit.UpbitAPI.Model.OrderChance;
 
 namespace upbit.View
 {
@@ -30,7 +31,7 @@ namespace upbit.View
             {
                 eTransactionSetting = ETransactionSetting.Sell;
                 this.button_curTransChange.Text = "매도";
-                
+
             }
             else
             {
@@ -43,12 +44,12 @@ namespace upbit.View
         private void ResetComboBox()
         {
             comboBox_selectMarket.Items.Clear();
-            if(eTransactionSetting == ETransactionSetting.Buy)
+            if (eTransactionSetting == ETransactionSetting.Buy)
             {
                 foreach (KeyValuePair<string, Coin> kvp in DictCoinInfo)
                 {
                     Coin coin = kvp.Value;
-                    if(coin.MarketGridTabIdx == EMarketGridTabIdx.KRW)
+                    if (coin.MarketGridTabIdx == EMarketGridTabIdx.KRW)
                     {
                         StringBuilder sbCoinDesc = new StringBuilder();
                         sbCoinDesc.Append(kvp.Value.CoinNameKor);
@@ -78,7 +79,7 @@ namespace upbit.View
             //OrderEnqForBuy(string market, double tradeValue, double waitOrderSecond)
             StringBuilder sbCoinMarketInfo = new StringBuilder();
             string selectCoin = comboBox_selectMarket.Text;
-            if(selectCoin == "선택")
+            if (selectCoin == "선택")
             {
                 return;
             }
@@ -87,36 +88,40 @@ namespace upbit.View
             int nMarketInfoLength = nMarketInfoEndIdx - nMarketInfoStartIdx - 1;
             string coinMarket = selectCoin.Substring(nMarketInfoStartIdx + 1, nMarketInfoLength);
             string transactionVolume = textBox_TransactionAmount.Text;
-            if(transactionVolume.Length < 1)
+            if (transactionVolume.Length < 1)
             {
                 return;
             }
+            //    public class MarketBidAsk
+            //{
+            //    public string currency;
+            //    public string price_unit;
+            //    public double min_total;
+            //}
             double dblTransactionVolume = Convert.ToDouble(transactionVolume);
+            Task<OrderChance> taskOrderChance = mAPI.GetOrderChance(coinMarket);
+            OrderChance thisMarketOrderChance = await taskOrderChance;
+            MarketInfo marketInfo = thisMarketOrderChance.market;
+
+
+            Console.WriteLine($"Ask Unit {marketInfo.ask.price_unit}, Sell Unit : {marketInfo.bid.price_unit}");
+
             if (eTransactionSetting == ETransactionSetting.Buy)
             {
-                Task<OrderChance> taskOrderChance = mAPI.GetOrderChance(coinMarket);
-                OrderChance thisMarketOrderChance = await taskOrderChance;
 
                 MyOrder newBuyOrder = new MyOrder(coinMarket, EnumClass.EOrderState.WaitBuy, dblTransactionVolume, 5);
-                await running.Buy(newBuyOrder, DateTime.Now, BuyOrSellStatus.First);
+                await RunMachine.Buy(newBuyOrder, DateTime.Now, BuyOrSellStatus.First);
             }
             else
             {
-                Task<OrderChance> taskOrderChance = mAPI.GetOrderChance(coinMarket);
-                OrderChance thisMarketOrderChance = await taskOrderChance;
-                //Task<List<OrderBook>> taskOrderBook = mAPI.GetOrderBook(coinMarket);
-                //List<OrderBook> listOrderBook = await taskOrderBook;
-
                 MyOrder newBuyOrder = new MyOrder(coinMarket, EnumClass.EOrderState.WaitSell, dblTransactionVolume, 5);
-                await running.Sell(newBuyOrder, DateTime.Now, BuyOrSellStatus.First);
-
-
+                await RunMachine.Sell(newBuyOrder, DateTime.Now, BuyOrSellStatus.First);
             }
         }
 
-       
 
-        
+
+
     }
 
 

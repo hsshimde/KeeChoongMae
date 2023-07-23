@@ -25,6 +25,9 @@ namespace upbit.UpbitAPI.Model
 
         public int GridRowNumber { get; set; }
 
+
+        public float GainLossValuation { get; set; }
+
         public CoinAccount(string MarketCode, double Profit, double Quantity, double CurPrice, double AvgPrice)
         {
             this.MarketCode = MarketCode;

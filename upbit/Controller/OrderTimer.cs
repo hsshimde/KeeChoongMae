@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using upbit.Model;
 
 namespace upbit.Controller
 {
@@ -10,12 +11,22 @@ namespace upbit.Controller
     {
         private void CheckAndStartOrderTimer()
         {
-            if(mInsertOrderQueue.Count>0)
+            if(false == mOrderTimer.Enabled )
             {
-                if(!mOrderTimer.Enabled)
+                MyOrder orderData;
+                if(mInsertOrderQueue.TryPeek(out orderData))
                 {
                     mOrderTimer.Start();
                 }
+               
+                //if (mInsertOrderQueue.Count > 0)
+                //{
+                //    if (!mOrderTimer.Enabled)
+                //    {
+                //        mOrderTimer.Start();
+                //    }
+                //}
+
             }
         }
 
@@ -32,3 +43,4 @@ namespace upbit.Controller
     }
 
 }
+ 

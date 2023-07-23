@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using upbit.View;
+using upbit.View.KeySaveForm;
 
 namespace upbit
 {
@@ -17,14 +18,13 @@ namespace upbit
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            LogInForm logInForm = new LogInForm();
-            Application.Run(logInForm);
+            KeySaveForm keySaveForm = new KeySaveForm();
+            Application.Run(keySaveForm);
 
-            if (logInForm.BIsLoggedIn)
+            if (keySaveForm.IsLoggedIn)
             {
-                MainForm main = new MainForm(logInForm.GetUpbitAPI());
+                MainForm main = new MainForm(keySaveForm.mAPI);
                 main.Init();
-                //await main.Init();
                 Application.Run(main);
             }
         }

@@ -10,13 +10,25 @@ namespace upbit.Enum
     {
         public enum EOrderState
         {
-            WaitBuy = 1<<0,
-            Buying = 1<<1,
-            IncompleteBuyOrder = 1<<2,
-            WaitSell = 1<<3,
-            Selling = 1<<4,
-            IncompleteSellOrder = 1<<5 
+            WaitBuy = 1 << 0,
+            Buying = 1 << 1,
+            IncompleteBuyOrder = 1 << 2,
+            WaitSell = 1 << 3,
+            Selling = 1 << 4,
+            IncompleteSellOrder = 1 << 5
         }
 
+        public enum EIsRunning
+        {
+            Running,
+            Paused,
+        }
+
+
+        public enum EDayFlag
+        {
+            PastOneDay,
+            NotYet
+        };
     }
 }

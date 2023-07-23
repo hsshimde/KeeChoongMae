@@ -29,12 +29,6 @@ namespace upbit.View
 
         //public List<string> listCoinNameSymbol[EMarketGridTabIdx.Count];
 
-        private void textBox_SearchBox_TextChanged(object sender, EventArgs e)
-        {
-            string input = textBox_SearchBox.Text;
-
-        }
-
         private  void textBoxMarketSearchBox_TextChanged(object sender, EventArgs e)
         {
             string coinSymbolInput = textBoxMarketSearchBox.Text;
@@ -55,7 +49,7 @@ namespace upbit.View
 
         private async Task<bool> ResetMarketGrid(EMarketGridTabIdx eGrid)
         {
-           Task<List<Ticker>> taskTickerList = mAPI.GetTicker(running.allMarketCode);
+           Task<List<Ticker>> taskTickerList = mAPI.GetTicker(RunMachine.allMarketCode);
             List<Ticker> tickerList = await taskTickerList;
             if (null == tickerList)
             {
@@ -97,7 +91,7 @@ namespace upbit.View
                 {
                     //updateSingleTickerData(ticker);
                     string marketCode = ticker.market;
-                    Coin mappedCoin = running.DictAllMarketInfo[marketCode];
+                    Coin mappedCoin = RunMachine.DictAllMarketInfo[marketCode];
                     if (mappedCoin.MarketGridTabIdx == eGrid)
                     {
                         Debug.Assert(UpdateDataGridView != null);
@@ -238,11 +232,20 @@ namespace upbit.View
             {
                 int matchCoinRowIdx = listFoundCoinIdx[nFoundIdx];
                 Coin matchCoin = dictCoinByRowIdx[matchCoinRowIdx];
-                Coin originalCoin = dictCoinByRowIdx[nFoundIdx];
+                Coin originalRowCoin = dictCoinByRowIdx[nFoundIdx];
+                if(matchCoin == originalRowCoin)
+                {
+                    continue;
+                }
+                //for (int nCoinRowIdx = 0; nCoinRowIdx < matchCoinRowIdx; nCoinRowIdx++)
+                //{
+                //    Coin coinByRowIdxBeforeInsert = dictCoinByRowIdx[nCoinRowIdx];
+                //    coinByRowIdxBeforeInsert.GridRowNumber++;
+                //}
                 swapRow(currentGridView, nFoundIdx, matchCoinRowIdx);
-                int nMatchCoinRowIdxBeforeSwap = matchCoin.GridRowNumber;
                 matchCoin.GridRowNumber = nFoundIdx;
-                originalCoin.GridRowNumber = nMatchCoinRowIdxBeforeSwap;
+                originalRowCoin.GridRowNumber = matchCoinRowIdx;
+                
             }
             clearAllSelectedRowWithGrid(currentGridView);
             for(int i = 0; i < listFoundCoinIdx.Count;++i)
@@ -258,32 +261,87 @@ namespace upbit.View
                 return;
             }
 
-            int nLowerIdx;
-            int nHigherIdx;
+            int lowerIdx;
+            int higherIdx;
             if(row1 > row2)
             {
-                nLowerIdx = row2;
-                nHigherIdx = row1;
+                lowerIdx = row2;
+                higherIdx = row1;
             }
             else
             {
-                nLowerIdx = row1;
-                nHigherIdx = row2;
+                lowerIdx = row1;
+                higherIdx = row2;
             }
 
-            DataGridViewRow gridRow1 = grid.Rows[nLowerIdx];
-            DataGridViewRow gridRow2 = grid.Rows[nHigherIdx];
-            grid.Rows.Remove(gridRow1);
-            grid.Rows.Remove(gridRow2);
-            grid.Rows.Insert(nLowerIdx, gridRow2);
-            grid.Rows.Insert(nHigherIdx, gridRow1);
-            //gridRow1.Selected = false;
-            //gridRow2.Selected = false;
-            //grid.Rows[nLowerIdx + 1].
-            //grid.Rows[nHigherIdx ].Selected = false;
-            //grid.Rows[nLowerIdx + 1].Selected = false;
-            //gridRow1.Selected = false;
-            //gridRow2.Selected = false;
+
+            //grid.Rows.InsertCopy(nLowerIdx, nHigherIdx + 1);
+            //grid.Rows.InsertCopy(nHigherIdx, nLowerIdx + 1);
+
+            //DataGridViewRow lowIdxRow = grid.Rows.SharedRow(lowerIdx);
+            //DataGridViewRow highIdxRow = grid.Rows.SharedRow(higherIdx);
+
+
+            DataGridViewCell lowRowFirstCell = grid[0, lowerIdx];
+            DataGridViewCell highRowFirstCell = grid[0, higherIdx];
+            object temp = lowRowFirstCell.Value;
+            object txtHigh = highRowFirstCell.Value;
+
+            lowRowFirstCell.Value = txtHigh;
+            highRowFirstCell.Value = temp;
+            
+
+            
+            //Debug.Assert(lowIdxRow == grid.Rows[nLowerIdx]);
+            //Debug.Assert(highIdxRow == grid.Rows[nHigherIdx]);
+
+            //grid.Rows.Remove(nLowerIdx);
+            //grid.Rows.Remove(highRow);
+            
+
+            //int curRowsCount = grid.Rows.Count;
+            //int nRowsCountAfterRemoval = grid.Rows.Count;
+
+
+            //DataGridViewRow lowerRow = grid.Rows[nLowerIdx];
+            //int nextLowRowIdx = grid.Rows.GetNextRow(nLowerIdx, DataGridViewElementStates.None);
+            //DataGridViewRow nextRow = grid.Rows[nextLowRowIdx];
+            //DataGridViewRow higherRow = grid.Rows[nHigherIdx];
+            //int nextHighRowIdx = grid.Rows.GetNextRow(nHigherIdx, DataGridViewElementStates.None);
+            //grid.Rows.
+            //DataGridViewRow rowTemp = new DataGridViewRow();
+            //rowTemp = lowerRow;
+            //lowerRow = higherRow;
+            //higherRow = rowTemp;
+            //rowTemp = null;
+
+
+            //grid.Rows.Remove(higherRow);
+            //grid.Rows.Remove(lowerRow);
+
+            //DataGridViewRow nextRowAfterRemoval = grid.Rows[nLowerIdx];
+            //Debug.Assert(nextRowAfterRemoval == nextRow);
+
+
+
+
+
+
+
+
+            //int nMaxRowsCount = grid.Rows.Count;
+            //if(nHigherIdx > grid.Rows.Count + 1)
+            //{
+            //    nHigherIdx--;
+            //}
+            //grid.Rows.Insert(nHigherIdx, lowerRow);
+            //grid.Rows.Insert(nLowerIdx, higherRow);
+
+            //grid.Rows.Insert()
+
+            //DataGridViewRow matchCoinRow = grid.Rows[row2];
+            //grid.Rows.Remove(matchCoinRow);
+            //grid.Rows.Insert(0, matchCoinRow);
         }
 
         private void clearAllSelectedRowWithGrid(DataGridView grid)
@@ -326,7 +384,7 @@ namespace upbit.View
             }
             clearAllSelectedRowWithGrid(currentGridView);
         }
-        private void button_marketSearchBox_MouseDown(object sender, MouseEventArgs e)
+        private void Button_marketSearchBox_MouseDown(object sender, MouseEventArgs e)
         {
             //clearAllSelectedRowWithTabIdx(0);
             //string search = textBoxMarketSearchBox.Text;
@@ -336,23 +394,35 @@ namespace upbit.View
             //}
             int nTabIdx = tabControl_market.SelectedIndex;
             DataGridView currentGridView = null;
+            Dictionary<int, Coin> dictCoinByRowIdx = null;
             switch (nTabIdx)
             {
                 case 0:
-                    currentGridView = dgvMarketKRW;
+                    {
+                        dictCoinByRowIdx = DictCoinByRowNumMarketKRW;
+                        currentGridView = dgvMarketKRW;
+                    }
                     break;
 
                 case 1:
-                    currentGridView = dgvMarketBTC;
-
+                    {
+                        dictCoinByRowIdx = DictCoinByRowNumMarketBTC;
+                        currentGridView = dgvMarketBTC;
+                    }
                     break;
 
                 case 2:
-                    currentGridView = dgvMarketUSDT;
+                    {
+                        dictCoinByRowIdx = DictCoinByRowNumMarketUSDT;
+                        currentGridView = dgvMarketUSDT;
+                    }
                     break;
 
                 case 3:
-                    currentGridView = dgvMarketInterestCoin;
+                    {
+                        dictCoinByRowIdx = DictCoinByRowNumMarketInterest;
+                        currentGridView = dgvMarketInterestCoin;
+                    }
                     break;
 
                 default:
@@ -360,14 +430,29 @@ namespace upbit.View
                     break;
             }
 
-            //*/
-             DataGridViewRow row1 = currentGridView.Rows[0];
-             DataGridViewRow row2 = currentGridView.Rows[1];
+            //DataGridViewRow row1 = currentGridView.Rows[0];
+            //DataGridViewRow row2 = currentGridView.Rows[1];
 
-             currentGridView.Rows.Remove(row2);
-             currentGridView.Rows.Remove(row1);
-             currentGridView.Rows.Insert(0, row2);
-             currentGridView.Rows.Insert(1, row1);
+
+            Coin firstCoin = dictCoinByRowIdx[0];
+            Coin secondCoin = dictCoinByRowIdx[1];
+
+            int nTempCoinRowNum = secondCoin.GridRowNumber;
+            secondCoin.GridRowNumber = firstCoin.GridRowNumber;
+            firstCoin.GridRowNumber = nTempCoinRowNum;
+
+
+            Coin firstCoinAfterChange = dictCoinByRowIdx[0];
+            Coin secondCoinAfterChange = dictCoinByRowIdx[1];
+
+            Debug.Assert(secondCoin == firstCoinAfterChange);
+            Debug.Assert(firstCoin == secondCoinAfterChange);
+            
+
+             //currentGridView.Rows.Remove(row2);
+             //currentGridView.Rows.Remove(row1);
+             //currentGridView.Rows.Insert(0, row2);
+             //currentGridView.Rows.Insert(1, row1);
              /*/
             for (int nIdx = 0; nIdx < currentGridView.Rows.Count; nIdx++)
             {

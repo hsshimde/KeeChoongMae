@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,11 +21,19 @@ namespace upbit.Controller
         private APIClass mAPI;
         public string m_strMyAssetCode { get; set; }
         public string m_SelectMarketInfo { get; set; }
-        public string allMarketCode;
+        public string allMarketCode { get; set; }
         public string SearchBoxMatchMarketCode { get; private set; }
         private MainForm mMainForm;
 
-        private Queue<Model.MyOrder> mInsertOrderQueue;
+        private ConcurrentQueue<Model.MyOrder> mInsertOrderQueue;
+        private TimeSpanCheck mTmSpanCheck;
+
+        public double RunningValue { get; set; }
+
+
+
+        private const double BUY_FEE = 0.05 * 0.01;
+        private const double SELL_FEE = 0.05 * 0.01;
 
         public enum BuyOrSellStatus
         {
@@ -39,16 +48,28 @@ namespace upbit.Controller
             Debug.Assert(mainForm != null);
             InitializeRunning(api);
             mMainForm = mainForm;
+            RunningMarketList = null;
+            RunningStatus = EnumClass.EIsRunning.Paused;
+            mTmSpanCheck = new TimeSpanCheck(DateTime.Now);
         }
 
         public void OrderEnqForBuy(string market, double tradeValue, double waitOrderSecond)
         {
             //마켓, 매수 가치, 매수 주문대기 시간
-            using
-                (
-             MyOrder insertOrder = new MyOrder(market, EnumClass.EOrderState.WaitBuy, tradeValue, waitOrderSecond))
+            //Coin marketCoin = DictAllMarketInfo[market];
+            if (DictAllMarketInfo.ContainsKey(market))
             {
-                mInsertOrderQueue.Enqueue(insertOrder);
+                Coin marketCoin = DictAllMarketInfo[market];
+                if(marketCoin.IsBuyingRequested == false)
+                {
+                    marketCoin.IsBuyingRequested = true;
+                    using
+                        (MyOrder insertOrder = new MyOrder(market, EnumClass.EOrderState.WaitBuy, tradeValue, waitOrderSecond))
+                    {
+                        mInsertOrderQueue.Enqueue(insertOrder);
+                    }
+
+                }
             }
         }
 
@@ -64,11 +85,57 @@ namespace upbit.Controller
         }
 
 
-        private async Task OrderDeque(DateTime dateTimeNow)
+        //private async Task OrderDeque(DateTime dateTimeNow)
+        //{
+        //    if (mInsertOrderQueue.Count > 0)
+        //    {
+        //        MyOrder orderData = mInsertOrderQueue.Dequeue();
+        //        switch (orderData.OrderState)
+        //        {
+        //            case EnumClass.EOrderState.WaitBuy:
+        //                {
+        //                    await Buy(orderData, dateTimeNow, BuyOrSellStatus.First); //매수 주문
+        //                }
+        //                break;
+
+        //            case EnumClass.EOrderState.Buying:
+        //                {
+        //                    await BeBuying(orderData, dateTimeNow); //매수 주문 중
+        //                }
+        //                break;
+
+        //            case EnumClass.EOrderState.IncompleteBuyOrder:
+        //                {
+        //                    await IncompleteBuy(orderData, dateTimeNow); //미체결 매수 주문 처리
+        //                }
+        //                break;
+
+        //            case EnumClass.EOrderState.WaitSell:
+        //                {
+        //                    await Sell(orderData, dateTimeNow, BuyOrSellStatus.First); //매도 주문
+        //                }
+        //                break;
+
+        //            case EnumClass.EOrderState.Selling:
+        //                {
+        //                    await BeSelling(orderData, dateTimeNow);  //매도 주문 중 
+        //                }
+        //                break;
+
+        //            case EnumClass.EOrderState.IncompleteSellOrder:
+        //                {
+        //                    await IncompleteSell(orderData, dateTimeNow);
+        //                }
+        //                break;
+        //        }
+        //    }
+        //}
+
+        private async Task DoOrderByStatus(MyOrder orderData, DateTime dateTimeNow)
         {
             if (mInsertOrderQueue.Count > 0)
             {
-                MyOrder orderData = mInsertOrderQueue.Dequeue();
+                //MyOrder orderData = mInsertOrderQueue.Dequeue();
                 switch (orderData.OrderState)
                 {
                     case EnumClass.EOrderState.WaitBuy:
@@ -110,12 +177,13 @@ namespace upbit.Controller
             }
         }
 
-        public void Go()
+        public async Task Go()
         {
-            //Debug.Assert(dictMarketCodeToCoin != null);
-            //mDictAllMarketCode = dictMarketCodeToCoin;
-            BeforeGoRunning();
-            this.mMainTimer.Start();
+            await BeforeGoRunning();
+            if (false == this.mMainTimer.Enabled)
+            {
+                this.mMainTimer.Start();
+            }
         }
 
         public void SetSearchBoxMatchMarketCode(string matchMarketCode)
@@ -162,14 +230,32 @@ namespace upbit.Controller
         {
             if (sender.Equals(this.mMainTimer))
             {
+                if(mMainForm.IsDisposed)
+                {
+                    return;
+                }
                 await DoUpdate();
-                await GetMainData();
+
                 CheckAndStartOrderTimer();
                 CheckAndStopOrderTimer();
-            }
+            } 
             else if (sender.Equals(this.mOrderTimer))
             {
-                await OrderDeque(e.SignalTime);
+                //await DoOrderByStatus(e.SignalTime);
+                MyOrder orderData = null;
+                bool bPopResult = mInsertOrderQueue.TryDequeue(out orderData);
+                if (orderData != null)
+                {
+                    if (bPopResult)
+                    {
+                        await DoOrderByStatus(orderData, e.SignalTime);
+
+                    }
+                }
+                else
+                {
+                    CheckAndStopOrderTimer();
+                }
             }
         }
 
@@ -210,6 +296,7 @@ namespace upbit.Controller
                 else
                 {
                     Console.WriteLine(thisError.message);
+                    //if(thisError.name == "Invalid_")
                     //if (thisError.name.Equals("under_min_total_bid"))
                     //{
                     //    Console.WriteLine(thisError.message);
@@ -242,6 +329,7 @@ namespace upbit.Controller
         public async Task BeBuying(MyOrder orderData, DateTime dateTimeNow)
         {
             //var orderInfo = mAPI.GetOrder(orderData.uuid, )
+            Console.WriteLine("Be Buying Function Call");
             Task<Order> taskOrder = mAPI.GetOrder(orderData.uuid);
             //using (var orderInfo = mAPI.GetOrder(orderData.uuid))
             Order orderInfo = await taskOrder;
@@ -253,14 +341,23 @@ namespace upbit.Controller
                     {
                         //체결 완료됨
                         Console.WriteLine("Bidding Complete~~~");
-                        
-                        
+                        if(DictAllMarketInfo.ContainsKey(orderData.market))
+                        {
+                            Coin buyingCoin = DictAllMarketInfo[orderData.market];
+                            buyingCoin.IsBuyingRequested = false;
+                            buyingCoin.UpdateBuyPricePos();
+                        }
+                        else
+                        {
+                            Debug.Assert(false, "NO Market COinData");
+                        }
                     }
                     else
                     {
-                        Console.WriteLine($"Current State :  {orderInfo.state}");
-                        Console.WriteLine($"Trades Price :  {orderInfo.price}");
-                        Console.WriteLine($"Reamining Volune :  {orderInfo.remaining_volume}");
+                        Console.WriteLine("--------Bidding(Buying) InComplete--------");
+                        Console.WriteLine($"-----Current State :  {orderInfo.state}----");
+                        Console.WriteLine($"-----Trades Price :  {orderInfo.price}-----");
+                        Console.WriteLine($"------Remaining Volune :  {orderInfo.remaining_volume}------");
                         //Console.WriteLine("${}");
 
                         //미체결 
@@ -269,12 +366,17 @@ namespace upbit.Controller
                         TimeSpan diffTime = dateTimeNow - orderData.OrderDateTime;
                         if (diffTime.TotalSeconds >= orderData.WaitOrderSeconds)
                         {
+                            Console.WriteLine("-----Time Over--------");
+                            Console.WriteLine("-----Making Cancel Order--------");
                             Task<CancelOrder> taskCancelOrder = mAPI.CancelOrder(orderData.uuid);
                             CancelOrder cancelOrder = await taskCancelOrder;
+                            Console.WriteLine("-------Cancelling Orders Start ----------");
                             if (cancelOrder != null)
                             {
                                 if (cancelOrder.error == null)
                                 {
+                                    Console.WriteLine("Incomplete Buy -- Inserting ordering queue again");
+
                                     orderData.OrderQuantity = cancelOrder.remaining_volume;
                                     orderData.OrderDateTime = dateTimeNow;
                                     orderData.OrderState = EnumClass.EOrderState.IncompleteBuyOrder;
@@ -282,12 +384,11 @@ namespace upbit.Controller
 
                                     //Need to Put Cancelling Ordering here
                                     //
-                                    Console.WriteLine("Incomplete Buy -- Inserting ordering queue again");
                                 }
                                 else
                                 {
                                     string errorMsg = cancelOrder.error.name + " - " + cancelOrder.error.message;
-                                    Console.WriteLine($"Error Occured ! [{errorMsg}] Inserting Queue Again");
+                                    Console.WriteLine($"[BUY]Cancelling Order Error Occured ! [{errorMsg}] Inserting Queue Again");
                                     mInsertOrderQueue.Enqueue(orderData); //에러로 인한 주문 실패는 다시 실행 +9
                                 }
                             }
@@ -295,7 +396,7 @@ namespace upbit.Controller
                             {
                                 //에러로 인한 주문실패 
                                 string errorMsg = cancelOrder.error.name + " - " + cancelOrder.error.message;
-                                Console.WriteLine($"Error Occured ! [{errorMsg}] Inserting Queue Again");
+                                Console.WriteLine($"[BUY]Cancelling Order Error Occured ! [{errorMsg}] Inserting Queue Again");
                                 mInsertOrderQueue.Enqueue(orderData); //에러로 인한 주문 실패는 다시 실행 +9
                             }
                         }
@@ -309,7 +410,7 @@ namespace upbit.Controller
             }
             else
             {
-                Console.WriteLine("BUY Order NULL -- Inserting ordering queue again");
+                Console.WriteLine("--------Get Buying Order Info NULL Inserting Queue Again---------");
                 mInsertOrderQueue.Enqueue(orderData);
             }
 
@@ -365,7 +466,7 @@ namespace upbit.Controller
                     }
                     else
                     {
-                        Console.WriteLine(thisError.message);
+                        Console.WriteLine(thisError.name + thisError.message);
 
                         //if (makeOrder.Error.Name.Equals("under_min_total_bid"))
                         //{
@@ -391,13 +492,14 @@ namespace upbit.Controller
         }
         private async Task BeSelling(MyOrder orderData, DateTime dateTimeNow)
         {
+            Console.WriteLine("Be Selling Function Call");
             Task<Order> taskSellInfo = mAPI.GetOrder(orderData.uuid);
-            Order sellInfo = await taskSellInfo;
-            if (sellInfo != null)
+            Order orderInfo = await taskSellInfo;
+            if (orderInfo != null)
             {
-                if (sellInfo.Error == null)
+                if (orderInfo.Error == null)
                 {
-                    if (sellInfo.remaining_volume <= 0)
+                    if (orderInfo.remaining_volume <= 0)
                     {
                         //매도 주문이 체결됨 로그 기록
                         Console.WriteLine("Asking Complete~~~");
@@ -407,34 +509,42 @@ namespace upbit.Controller
                         //미체결
                         //사용자가 설정한 시간이 지나도 체결이 되지 않는다면 
                         //주문 취소 후 다음 큐에 매도 주문을 넣음
+
+                        Console.WriteLine("--------Asking(Selling) InComplete--------");
+                        Console.WriteLine($"-----Current State :  {orderInfo.state}----");
+                        Console.WriteLine($"-----Trades Price :  {orderInfo.price}-----");
+                        Console.WriteLine($"------Remaining Volune :  {orderInfo.remaining_volume}------");
                         TimeSpan diffTime = dateTimeNow - orderData.OrderDateTime;
                         if (diffTime.TotalSeconds >= orderData.WaitOrderSeconds)
                         {
+                            Console.WriteLine("-----Time Over--------");
+                            Console.WriteLine("-----Making Cancel Order--------");
                             Task<CancelOrder> taskCancelOrder = mAPI.CancelOrder(orderData.uuid);
                             CancelOrder cancelOrder = await taskCancelOrder;
+                            Console.WriteLine("-------Cancelling Orders Start ----------");
                             if (cancelOrder != null)
                             {
                                 if (cancelOrder.error == null)
                                 {
+                                    Console.WriteLine("Incomplete Selling -- Inserting ordering queue again");
                                     orderData.OrderDateTime = dateTimeNow;
                                     orderData.OrderQuantity = cancelOrder.remaining_volume;
                                     orderData.OrderState = EnumClass.EOrderState.IncompleteSellOrder;
                                     mInsertOrderQueue.Enqueue(orderData);
-                                    Console.WriteLine("Incomplete Selling -- Inserting ordering queue again");
                                     //취소 주문 투입
                                 }
                                 else
                                 {
                                     string errorMsg = cancelOrder.error.name + " - " + cancelOrder.error.message;
-                                    Console.WriteLine($"Error Occured ! [{errorMsg}] Inserting Queue Again");
-                                    mInsertOrderQueue.Enqueue(orderData); //에러로 인한 주문 실패는 다시 실행 +9
+                                    Console.WriteLine($"[SELL]Error Occured ! [{errorMsg}] Inserting Queue Again");
+                                    mInsertOrderQueue.Enqueue(orderData);
                                 }
                             }
                             else
                             {
                                 // 에러로 인한 주문실패 
                                 string errorMsg = cancelOrder.error.name + " - " + cancelOrder.error.message;
-                                Console.WriteLine($"Error Occured ! [{errorMsg}] Inserting Queue Again");
+                                Console.WriteLine($"[SELL]Error Occured ! [{errorMsg}] Inserting Queue Again");
                                 mInsertOrderQueue.Enqueue(orderData);
                             }
                         }
@@ -448,7 +558,7 @@ namespace upbit.Controller
             }
             else
             {
-                Console.WriteLine("SELL Order NULL -- Inserting ordering queue again");
+                Console.WriteLine("--------Get Selling Order Info NULL Inserting Queue Again---------");
                 mInsertOrderQueue.Enqueue(orderData);
             }
         }
@@ -466,7 +576,7 @@ namespace upbit.Controller
             if (DictAllMarketInfo.ContainsKey(marketInfo))
             {
                 Coin lookedUpCoin = DictAllMarketInfo[marketInfo];
-                return lookedUpCoin.CurPrice;
+                return lookedUpCoin.MarketTicker.trade_price;
             }
             else
             {

@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using upbit.UpbitAPI.Model;
 using upbit.ColumnNameBuilder;
+using System.Globalization;
 
 namespace upbit.View
 {
@@ -30,6 +31,10 @@ namespace upbit.View
         }
         private void OnEventAccountUpdate(object sender, CoinAccount coinAccount)
         {
+            if(this.IsDisposed)
+            {
+                return;
+            }
             EMarketGridTabIdx eGridKind = coinAccount.GridKind;
             ColNameBuilder colBuilder = new ColNameBuilder();
             colBuilder.GridType = ColNameBuilder.EGridType.myAsset;
@@ -37,6 +42,11 @@ namespace upbit.View
             {
                 case EMarketGridTabIdx.KRW:
                     {
+                        if(dgvMyAssetKRW.IsDisposed)
+                        {
+                            return;
+                        }
+                        
                         if (dgvMyAssetKRW.InvokeRequired)
                         {
                             dgvMyAssetKRW.Invoke((MethodInvoker)delegate ()
@@ -72,20 +82,24 @@ namespace upbit.View
                                 //colBuilder.ColItem = ColNameBuilder.EColItem.MarketCode;
                                 //dgvMyAssetKRW[colBuilder.BuildColName(), coinAccount.RowNumber].
                                 colBuilder.ColItem = ColNameBuilder.EColItem.OwnCount;
-                                dgvMyAssetKRW[colBuilder.BuildColName(), coinAccount.GridRowNumber].Value = coinAccount.Quantity;
+                                //dgvMyAssetKRW[colBuilder.BuildColIdx(), coinAccount.GridRowNumber].Value = coinAccount.Quantity;
+                                dgvMyAssetKRW[colBuilder.BuildColIdx(), coinAccount.GridRowNumber].Value = Decimal.Parse(coinAccount.Quantity.ToString(), System.Globalization.NumberStyles.Float);
                                 colBuilder.ColItem = ColNameBuilder.EColItem.AvgBuyPrice;
-                                dgvMyAssetKRW[colBuilder.BuildColName(), coinAccount.GridRowNumber].Value = coinAccount.AvgBuyPrice;
+                                dgvMyAssetKRW[colBuilder.BuildColIdx(), coinAccount.GridRowNumber].Value = coinAccount.AvgBuyPrice;
                                 colBuilder.ColItem = ColNameBuilder.EColItem.CurNetValue;
-                                dgvMyAssetKRW[colBuilder.BuildColName(), coinAccount.GridRowNumber].Style.ForeColor = foreColorProfitFromBuyPoint;
-                                dgvMyAssetKRW[colBuilder.BuildColName(), coinAccount.GridRowNumber].Value = Math.Floor(coinAccount.CurNetValue);
+                                dgvMyAssetKRW[colBuilder.BuildColIdx(), coinAccount.GridRowNumber].Style.ForeColor = foreColorProfitFromBuyPoint;
+                                dgvMyAssetKRW[colBuilder.BuildColIdx(), coinAccount.GridRowNumber].Value = Math.Floor(coinAccount.CurNetValue);
                                 colBuilder.ColItem = ColNameBuilder.EColItem.BuyVolume;
-                                dgvMyAssetKRW[colBuilder.BuildColName(), coinAccount.GridRowNumber].Value = Math.Floor(coinAccount.AvgBuyPrice * coinAccount.Quantity);
+                                dgvMyAssetKRW[colBuilder.BuildColIdx(), coinAccount.GridRowNumber].Value = Math.Floor(coinAccount.AvgBuyPrice * coinAccount.Quantity);
                                 colBuilder.ColItem = ColNameBuilder.EColItem.CurProfitPercentage;
-                                dgvMyAssetKRW[colBuilder.BuildColName(), coinAccount.GridRowNumber].Value = Math.Round(coinAccount.ProfitPercentageBuy, 2);
-                                dgvMyAssetKRW[colBuilder.BuildColName(), coinAccount.GridRowNumber].Style.ForeColor = foreColorProfitFromBuyPoint;
+                                dgvMyAssetKRW[colBuilder.BuildColIdx(), coinAccount.GridRowNumber].Value = Math.Round(coinAccount.ProfitPercentageBuy, 2);
+                                dgvMyAssetKRW[colBuilder.BuildColIdx(), coinAccount.GridRowNumber].Style.ForeColor = foreColorProfitFromBuyPoint;
                                 colBuilder.ColItem = ColNameBuilder.EColItem.Compare24H;
-                                dgvMyAssetKRW[colBuilder.BuildColName(), coinAccount.GridRowNumber].Value = Math.Round(coinAccount.ProfitPercentageCompare24H, 2);
-                                dgvMyAssetKRW[colBuilder.BuildColName(), coinAccount.GridRowNumber].Style.ForeColor = foreColorProfitCompare24H;
+                                dgvMyAssetKRW[colBuilder.BuildColIdx(), coinAccount.GridRowNumber].Value = Math.Round(coinAccount.ProfitPercentageCompare24H, 2);
+                                dgvMyAssetKRW[colBuilder.BuildColIdx(), coinAccount.GridRowNumber].Style.ForeColor = foreColorProfitCompare24H;
+                                colBuilder.ColItem = ColNameBuilder.EColItem.GainLossValuation;
+                                dgvMyAssetKRW[colBuilder.BuildColIdx(), coinAccount.GridRowNumber].Value = Math.Round(coinAccount.GainLossValuation, 2);
+                                dgvMyAssetKRW[colBuilder.BuildColIdx(), coinAccount.GridRowNumber].Style.ForeColor = foreColorProfitFromBuyPoint;
 
                             });
                         }
@@ -123,13 +137,19 @@ namespace upbit.View
 
                 case EMarketGridTabIdx.BTC:
                     {
-
+                        //if(dgvMyAssetBTC.IsDisposed)
+                        {
+                            return;
+                        }
                     }
-                    break;
+                    //break;
 
                 case EMarketGridTabIdx.USDT:
                     {
-
+                        if(dgvmyAssetUSDT.IsDisposed)
+                        {
+                            return;
+                        }
                     }
                     break;
             }
@@ -212,8 +232,9 @@ namespace upbit.View
 
         private void OnUpdateTotalAsset(object sender, double dblTotal)
         {
-            toolStripLabel_totalAsset.Text = dblTotal.ToString("C0");
+            //toolStripLabel_totalAsset.Text = dblTotal.ToString("C0");
         }
+
     }
 
 }

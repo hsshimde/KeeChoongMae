@@ -8,7 +8,6 @@ namespace upbit.UpbitAPI.Model
 {
     class Asset : IDisposable
     {
-
         public Account account{get; set; }
         public Coin coin { get; set; }
 
